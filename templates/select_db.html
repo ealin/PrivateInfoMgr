@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}選擇資料庫 — 密碼管理系統{% endblock %}
+
+{% block content %}
+<div class="center-wrap">
+  <div class="brand">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      <circle cx="12" cy="16" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+    <h1 class="brand-title">密碼管理系統</h1>
+  </div>
+
+  <!-- Existing databases -->
+  {% if databases %}
+  <section class="card">
+    <h2 class="section-title">選擇資料庫</h2>
+    <div class="db-list">
+      {% for db in databases %}
+      <button class="db-item" data-db-file="{{ db.file }}" data-db-name="{{ db.display_name }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+        <span>{{ db.display_name }}</span>
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+      {% endfor %}
+    </div>
+  </section>
+  {% else %}
+  <p class="hint-text">尚無資料庫，請建立第一個資料庫。</p>
+  {% endif %}
+
+  <!-- Create new database -->
+  <section class="card">
+    <h2 class="section-title">建立新資料庫</h2>
+    <form method="POST" action="/create-db" id="createDbForm">
+      <div class="form-group">
+        <label>資料庫名稱</label>
+        <input type="text" name="display_name" placeholder="例：個人、工作" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>帳號</label>
+        <input type="text" name="username" placeholder="登入帳號" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>第一層密碼</label>
+        <div class="input-wrap">
+          <input type="password" name="password1" placeholder="用於登入驗證" required autocomplete="new-password" id="create_p1">
+          <button type="button" class="toggle-pw" data-target="create_p1">&#9679;</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>第二層密碼</label>
+        <div class="input-wrap">
+          <input type="password" name="password2" placeholder="用於查看密碼，不可與第一層相同" required autocomplete="new-password" id="create_p2">
+          <button type="button" class="toggle-pw" data-target="create_p2">&#9679;</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">建立資料庫</button>
+    </form>
+  </section>
+</div>
+
+<!-- Login modal -->
+<div id="loginModal" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="loginModalTitle">登入</h3>
+      <button class="modal-close" id="loginModalClose">&times;</button>
+    </div>
+    <form method="POST" action="/login" id="loginForm">
+      <input type="hidden" name="db_file" id="loginDbFile">
+      <div class="form-group">
+        <label>帳號</label>
+        <input type="text" name="username" placeholder="請輸入帳號" required autocomplete="off" id="loginUsername">
+      </div>
+      <div class="form-group">
+        <label>第一層密碼</label>
+        <div class="input-wrap">
+          <input type="password" name="password1" placeholder="第一層密碼" required autocomplete="current-password" id="login_p1">
+          <button type="button" class="toggle-pw" data-target="login_p1">&#9679;</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>第二層密碼</label>
+        <div class="input-wrap">
+          <input type="password" name="password2" placeholder="第二層密碼" required autocomplete="current-password" id="login_p2">
+          <button type="button" class="toggle-pw" data-target="login_p2">&#9679;</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">登入</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
