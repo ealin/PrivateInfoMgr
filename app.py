@@ -7,6 +7,7 @@ Session strategy:
   - The Master Key is NEVER written to disk; losing the process clears all sessions.
 """
 
+import os
 import secrets
 import threading
 import uuid
@@ -24,7 +25,9 @@ from models import (create_record, create_user, delete_record, get_all_records,
                     get_record, get_user, init_db, load_db_index,
                     save_db_index, update_record)
 
-app = Flask(__name__)
+app = Flask(__name__,
+            template_folder=os.path.join(config.BUNDLE_DIR, 'templates'),
+            static_folder=os.path.join(config.BUNDLE_DIR, 'static'))
 app.secret_key = config.SECRET_KEY
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
@@ -189,7 +192,6 @@ def delete_db():
     if not verify_password(user['password2_hash'], password2):
         return jsonify({'error': error_msg}), 403
 
-    import os
     db_full_path = os.path.join(config.DATA_DIR, db_file)
     if os.path.exists(db_full_path):
         os.remove(db_full_path)

@@ -1,8 +1,16 @@
 import os
 import secrets
+import sys
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+# When frozen by PyInstaller, resources live in sys._MEIPASS;
+# user data goes to ~/Library/Application Support/PWDManager.
+if getattr(sys, 'frozen', False):
+    BUNDLE_DIR = sys._MEIPASS
+    DATA_DIR   = os.path.expanduser('~/Library/Application Support/PWDManager')
+else:
+    BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
+    BUNDLE_DIR = BASE_DIR
+    DATA_DIR   = os.path.join(BASE_DIR, 'data')
 
 
 def _get_or_create_secret_key() -> str:

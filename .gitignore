@@ -17,3 +17,6 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+dist/
+build/
+*.spec.bak
