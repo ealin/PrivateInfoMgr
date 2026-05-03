@@ -36,7 +36,7 @@ def _open_browser_when_ready() -> None:
 
 class PWDManagerApp(rumps.App):
     def __init__(self):
-        super().__init__(title='🔐', quit_button=rumps.MenuItem('結束'))
+        super().__init__('PWDManager', title='🔐', quit_button='結束')
         self.menu = [rumps.MenuItem('開啟管理頁面', callback=self.open_page)]
 
     def open_page(self, _):
