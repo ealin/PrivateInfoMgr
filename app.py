@@ -167,6 +167,39 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/delete-db', methods=['POST'])
+def delete_db():
+    data      = request.get_json()
+    db_file   = data.get('db_file', '')
+    username  = data.get('username', '').strip()
+    password1 = data.get('password1', '')
+    password2 = data.get('password2', '')
+
+    idx = load_db_index()
+    known = {d['file'] for d in idx}
+    if db_file not in known:
+        return jsonify({'error': '資料庫不存在'}), 404
+
+    error_msg = '帳號或密碼錯誤'
+    user = get_user(db_file, username)
+    if not user:
+        return jsonify({'error': error_msg}), 403
+    if not verify_password(user['password1_hash'], password1):
+        return jsonify({'error': error_msg}), 403
+    if not verify_password(user['password2_hash'], password2):
+        return jsonify({'error': error_msg}), 403
+
+    import os
+    db_full_path = os.path.join(config.DATA_DIR, db_file)
+    if os.path.exists(db_full_path):
+        os.remove(db_full_path)
+
+    new_idx = [d for d in idx if d['file'] != db_file]
+    save_db_index(new_idx)
+
+    return jsonify({'success': True})
+
+
 @app.route('/dashboard')
 @require_auth
 def dashboard():

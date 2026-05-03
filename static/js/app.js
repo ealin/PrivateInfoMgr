@@ -65,6 +65,68 @@ if (loginModal) {
   });
 }
 
+// ── Delete database modal ─────────────────────────────────────────────────────
+
+const deleteDbModal      = $('deleteDbModal');
+const deleteDbError      = $('deleteDbError');
+
+if (deleteDbModal) {
+  function openDeleteDb(dbFile, dbName) {
+    $('deleteDbFile').value     = dbFile;
+    $('deleteDbName').textContent = dbName;
+    $('deleteDbUsername').value = '';
+    $('deleteDb_p1').value      = '';
+    $('deleteDb_p2').value      = '';
+    deleteDbError.hidden        = true;
+    show(deleteDbModal);
+    setTimeout(() => $('deleteDbUsername').focus(), 60);
+  }
+
+  function closeDeleteDb() { hide(deleteDbModal); }
+
+  document.querySelectorAll('.db-delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeleteDb(btn.dataset.dbFile, btn.dataset.dbName);
+    });
+  });
+
+  $('deleteDbModalClose').addEventListener('click', closeDeleteDb);
+  $('deleteDbCancelBtn').addEventListener('click', closeDeleteDb);
+  deleteDbModal.addEventListener('click', (e) => { if (e.target === deleteDbModal) closeDeleteDb(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !deleteDbModal.hidden) closeDeleteDb(); });
+
+  $('deleteDbConfirmBtn').addEventListener('click', async () => {
+    const btn      = $('deleteDbConfirmBtn');
+    const dbFile   = $('deleteDbFile').value;
+    const username = $('deleteDbUsername').value.trim();
+    const p1       = $('deleteDb_p1').value;
+    const p2       = $('deleteDb_p2').value;
+
+    if (!username || !p1 || !p2) {
+      deleteDbError.textContent = '請填寫所有欄位';
+      deleteDbError.hidden = false;
+      return;
+    }
+
+    btn.disabled = true;
+    deleteDbError.hidden = true;
+    try {
+      await api('POST', '/delete-db', { db_file: dbFile, username, password1: p1, password2: p2 });
+      closeDeleteDb();
+      location.reload();
+    } catch (err) {
+      deleteDbError.textContent = err.message;
+      deleteDbError.hidden = false;
+      $('deleteDb_p1').value = '';
+      $('deleteDb_p2').value = '';
+      $('deleteDbUsername').focus();
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // DASHBOARD PAGE
 // ══════════════════════════════════════════════════════════════════════════════
@@ -118,14 +180,23 @@ else {
 
   // ── Search ─────────────────────────────────────────────────────────────────
 
-  $('searchInput').addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) { renderRecords(allRecords); return; }
-    renderRecords(allRecords.filter(r =>
-      (r.name    || '').toLowerCase().includes(q) ||
-      (r.url     || '').toLowerCase().includes(q) ||
-      (r.account || '').toLowerCase().includes(q)
-    ));
+  const searchInput = $('searchInput');
+  const searchClear = $('searchClear');
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    searchClear.hidden = !q;
+    renderRecords(q
+      ? allRecords.filter(r => (r.name || '').toLowerCase().includes(q))
+      : allRecords
+    );
+  });
+
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchClear.hidden = true;
+    renderRecords(allRecords);
+    searchInput.focus();
   });
 
   // ── Add / Edit modal ───────────────────────────────────────────────────────
@@ -249,6 +320,7 @@ else {
 
   $('revealModalClose').addEventListener('click', closeReveal);
   revealModal.addEventListener('click', (e) => { if (e.target === revealModal) closeReveal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !revealModal.hidden) closeReveal(); });
 
   $('revealSubmitBtn').addEventListener('click', async () => {
     const p2 = revealPassword2.value;
@@ -327,5 +399,11 @@ else {
   });
 
   // ── Init ───────────────────────────────────────────────────────────────────
+  // readonly blocks browser autofill; remove it after the fill window passes
+  setTimeout(() => {
+    searchInput.removeAttribute('readonly');
+    searchInput.value = '';
+    searchClear.hidden = true;
+  }, 200);
   loadRecords();
 }

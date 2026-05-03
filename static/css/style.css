@@ -81,16 +81,28 @@ html, body {
 /* ── DB list ─────────────────────────────────────────────────────────────── */
 .db-list { display: flex; flex-direction: column; gap: 8px; }
 
+.db-row { display: flex; align-items: stretch; gap: 8px; }
+
 .db-item {
   display: flex; align-items: center; gap: 10px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 12px 14px;
   color: var(--text); cursor: pointer; font-size: 14px;
   transition: background .15s, border-color .15s;
-  width: 100%; text-align: left;
+  flex: 1; text-align: left;
 }
 .db-item:hover { background: var(--accent-dim); border-color: var(--accent); }
 .db-item .arrow { margin-left: auto; color: var(--text3); }
+
+.db-delete-btn {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text3);
+  cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+  flex-shrink: 0;
+}
+.db-delete-btn:hover { background: rgba(224,85,85,.15); border-color: var(--danger); color: var(--danger); }
 
 /* ── Forms ───────────────────────────────────────────────────────────────── */
 .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -187,15 +199,31 @@ html, body {
 .content-title { font-size: 20px; font-weight: 700; }
 
 /* ── Search ──────────────────────────────────────────────────────────────── */
+.search-wrap {
+  position: relative; display: inline-flex; align-items: center;
+  width: 100%; max-width: 360px;
+}
+.search-icon {
+  position: absolute; left: 10px; color: var(--text3); pointer-events: none; flex-shrink: 0;
+}
 .search-bar input {
-  width: 100%; max-width: 400px;
+  width: 100%;
   background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 8px 14px;
+  border-radius: var(--radius); padding: 8px 36px 8px 32px;
   color: var(--text); font-size: 14px; outline: none;
   transition: border-color .15s;
 }
 .search-bar input:focus { border-color: var(--accent); }
 .search-bar input::placeholder { color: var(--text3); }
+.search-clear {
+  position: absolute; right: 6px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text3); font-size: 18px; line-height: 1;
+  padding: 2px 6px; border-radius: 4px;
+  transition: color .15s;
+}
+.search-clear:hover { color: var(--text); }
+.search-clear[hidden] { display: none; }
 
 /* ── Table ───────────────────────────────────────────────────────────────── */
 .table-wrap {
@@ -218,8 +246,9 @@ html, body {
 }
 .records-table tr:last-child td { border-bottom: none; }
 .records-table tbody tr:hover td { background: var(--accent-dim); }
-.col-actions { width: 140px; text-align: right; }
-.td-actions  { display: flex; gap: 6px; justify-content: flex-end; }
+.col-actions { width: 220px; text-align: right; white-space: nowrap; }
+.td-actions  { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: nowrap; }
+.td-actions .btn { white-space: nowrap; }
 
 .text-center { text-align: center; }
 .text-muted  { color: var(--text2); }
