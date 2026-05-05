@@ -1,0 +1,165 @@
+{% extends "pwd/base.html" %}
+{% block title %}{{ display_name }} — 密碼管理系統{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <circle cx="12" cy="16" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      <span>密碼管理系統</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">目前資料庫</span>
+      <span class="sidebar-db-name">{{ display_name }}</span>
+      <span class="sidebar-db-user">{{ username }}</span>
+    </div>
+    <div class="sidebar-actions">
+      <form method="POST" action="{{ url_for('pwd.logout') }}">
+        <button type="submit" class="btn btn--ghost btn--full">登出</button>
+      </form>
+      <a href="{{ url_for('home') }}" class="btn btn--ghost btn--full" style="margin-top:8px;text-decoration:none;text-align:center">主畫面</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="content-header">
+      <h2 class="content-title">密碼記錄</h2>
+      <button class="btn btn--primary" id="newRecordBtn">+ 新增記錄</button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="搜尋名稱…" autocomplete="off" readonly>
+        <button id="searchClear" class="search-clear" hidden title="清除搜尋">&times;</button>
+      </div>
+    </div>
+
+    <!-- Records table -->
+    <div class="table-wrap">
+      <table class="records-table" id="recordsTable">
+        <thead>
+          <tr>
+            <th>名稱</th>
+            <th>網址</th>
+            <th>帳號</th>
+            <th>附註 1</th>
+            <th>附註 2</th>
+            <th class="col-actions">操作</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTbody">
+          <tr id="loadingRow">
+            <td colspan="6" class="text-center text-muted">載入中…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- ── Add / Edit record modal ── -->
+<div id="recordModal" class="modal" hidden>
+  <div class="modal-box modal-box--wide">
+    <div class="modal-header">
+      <h3 id="recordModalTitle">新增記錄</h3>
+      <button class="modal-close" id="recordModalClose">&times;</button>
+    </div>
+    <form id="recordForm">
+      <input type="hidden" id="recordId">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>名稱 <span class="required">*</span></label>
+          <input type="text" id="f_name" placeholder="網站或服務名稱" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>網址</label>
+          <input type="text" id="f_url" placeholder="https://..." autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>帳號</label>
+          <input type="text" id="f_account" placeholder="登入帳號或 Email" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label id="pwLabel">密碼</label>
+          <div class="input-wrap">
+            <input type="password" id="f_password" placeholder="留空表示不修改" autocomplete="new-password">
+            <button type="button" class="toggle-pw" data-target="f_password">&#9679;</button>
+          </div>
+        </div>
+        <div class="form-group form-group--full">
+          <label>附註 1</label>
+          <textarea id="f_note1" rows="2" placeholder="備注資訊…"></textarea>
+        </div>
+        <div class="form-group form-group--full">
+          <label>附註 2</label>
+          <textarea id="f_note2" rows="2" placeholder="備注資訊…"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" id="recordModalCancel">取消</button>
+        <button type="submit" class="btn btn--primary" id="recordSubmitBtn">儲存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Reveal password modal ── -->
+<div id="revealModal" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>查看密碼</h3>
+      <button class="modal-close" id="revealModalClose">&times;</button>
+    </div>
+
+    <!-- Step 1: enter Layer-2 password -->
+    <div id="revealStep1">
+      <p class="modal-desc">請輸入第二層密碼以查看：<strong id="revealRecordName"></strong></p>
+      <div class="form-group">
+        <div class="input-wrap">
+          <input type="password" id="revealPassword2" placeholder="第二層密碼" autocomplete="current-password">
+          <button type="button" class="toggle-pw" data-target="revealPassword2">&#9679;</button>
+        </div>
+      </div>
+      <div id="revealError" class="error-msg" hidden></div>
+      <button class="btn btn--primary btn--full" id="revealSubmitBtn">確認</button>
+    </div>
+
+    <!-- Step 2: show the password -->
+    <div id="revealStep2" hidden>
+      <p class="modal-desc">密碼將在 <span id="revealCountdown">20</span> 秒後自動清除</p>
+      <div class="password-display">
+        <span id="revealResult"></span>
+        <button type="button" class="btn btn--ghost btn--sm" id="copyPwBtn">複製</button>
+      </div>
+      <div class="countdown-bar"><div class="countdown-fill" id="countdownFill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Delete confirm modal ── -->
+<div id="deleteModal" class="modal" hidden>
+  <div class="modal-box modal-box--sm">
+    <div class="modal-header">
+      <h3>確認刪除</h3>
+      <button class="modal-close" id="deleteModalClose">&times;</button>
+    </div>
+    <p class="modal-desc">確定要刪除「<strong id="deleteRecordName"></strong>」嗎？此操作無法復原。</p>
+    <div class="form-actions">
+      <button class="btn btn--ghost" id="deleteCancelBtn">取消</button>
+      <button class="btn btn--danger" id="deleteConfirmBtn">刪除</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -112,7 +112,7 @@ if (deleteDbModal) {
     btn.disabled = true;
     deleteDbError.hidden = true;
     try {
-      await api('POST', '/delete-db', { db_file: dbFile, username, password1: p1, password2: p2 });
+      await api('POST', '/pwd/delete-db', { db_file: dbFile, username, password1: p1, password2: p2 });
       closeDeleteDb();
       location.reload();
     } catch (err) {
@@ -141,7 +141,7 @@ else {
 
   async function loadRecords() {
     try {
-      allRecords = await api('GET', '/api/records');
+      allRecords = await api('GET', '/pwd/api/records');
       renderRecords(allRecords);
     } catch (err) {
       recordsTbody.innerHTML =
@@ -223,7 +223,7 @@ else {
 
   async function openEdit(id) {
     try {
-      const r = await api('GET', `/api/records/${id}`);
+      const r = await api('GET', `/pwd/api/records/${id}`);
       $('recordId').value   = r.id;
       $('f_name').value     = r.name;
       $('f_url').value      = r.url;
@@ -264,9 +264,9 @@ else {
     btn.disabled = true;
     try {
       if (id) {
-        await api('PUT', `/api/records/${id}`, payload);
+        await api('PUT', `/pwd/api/records/${id}`, payload);
       } else {
-        await api('POST', '/api/records', payload);
+        await api('POST', '/pwd/api/records', payload);
       }
       hide(recordModal);
       await loadRecords();
@@ -329,7 +329,7 @@ else {
     btn.disabled = true;
     hide(revealError);
     try {
-      const data = await api('POST', `/api/records/${_revealId}/reveal`, { password2: p2 });
+      const data = await api('POST', `/pwd/api/records/${_revealId}/reveal`, { password2: p2 });
       revealResult.textContent = data.password;
       hide(revealStep1);
       show(revealStep2);
@@ -388,7 +388,7 @@ else {
     const btn = $('deleteConfirmBtn');
     btn.disabled = true;
     try {
-      await api('DELETE', `/api/records/${_deleteId}`);
+      await api('DELETE', `/pwd/api/records/${_deleteId}`);
       hide(deleteModal);
       await loadRecords();
     } catch (err) {

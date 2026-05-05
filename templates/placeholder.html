@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} — Ealin 私人資訊管理系統</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .ph-wrap {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px; padding: 40px 16px; text-align: center;
+    }
+    .ph-title { font-size: 24px; font-weight: 700; color: var(--text); }
+    .ph-note  { font-size: 14px; color: var(--text2); }
+  </style>
+</head>
+<body>
+<div class="ph-wrap">
+  <h1 class="ph-title">{{ title }}</h1>
+  <p class="ph-note">此功能尚在開發中，敬請期待。</p>
+  <a href="{{ url_for('home') }}" class="btn btn--ghost">← 返回主畫面</a>
+</div>
+</body>
+</html>
