@@ -1,0 +1,117 @@
+{
+  "lang.zh_TW": "繁中",
+  "lang.en": "EN",
+
+  "home.title":       "Ealin Personal Information Manager",
+  "home.subtitle":    "Select a Module",
+  "home.coming_soon": "Coming Soon",
+
+  "module.pwd":         "Password Manager",
+  "module.places":      "Places I Want to Go",
+  "module.bucket_list": "Life Bucket List",
+
+  "placeholder.body": "This feature is currently under development. Stay tuned.",
+  "placeholder.back": "← Back to Home",
+
+  "common.cancel":    "Cancel",
+  "common.save":      "Save",
+  "common.back_home": "← Back to Home",
+  "common.logout":    "Sign Out",
+  "common.home":      "Home",
+
+  "pwd.brand":      "Password Manager",
+  "pwd.page_title": "Select Database — Password Manager",
+
+  "pwd.select_db.section": "Select Database",
+  "pwd.select_db.no_db":   "No databases found. Please create your first database.",
+  "pwd.select_db.delete_tooltip": "Delete database",
+
+  "pwd.create_db.section":    "Create New Database",
+  "pwd.create_db.name_label": "Database Name",
+  "pwd.create_db.name_ph":    "e.g. Personal, Work",
+  "pwd.create_db.submit":     "Create Database",
+
+  "pwd.login.title":  "Sign In",
+  "pwd.login.submit": "Sign In",
+
+  "pwd.delete_db.title":          "Delete Database",
+  "pwd.delete_db.confirm_prefix": "You are about to permanently delete \"",
+  "pwd.delete_db.confirm_suffix": "\". Enter your credentials to confirm.",
+  "pwd.delete_db.submit":         "Confirm Delete",
+
+  "pwd.field.username":        "Username",
+  "pwd.field.username_ph":     "Enter username",
+  "pwd.field.username_new_ph": "Username",
+  "pwd.field.password1":       "First-Layer Password",
+  "pwd.field.password1_ph":    "First-layer password",
+  "pwd.field.password1_new_ph":"Used for authentication",
+  "pwd.field.password2":       "Second-Layer Password",
+  "pwd.field.password2_ph":    "Second-layer password",
+  "pwd.field.password2_new_ph":"Used to reveal passwords. Must differ from first-layer.",
+
+  "pwd.dashboard.page_title": "Password Records",
+  "pwd.dashboard.current_db": "Current Database",
+  "pwd.dashboard.new_record": "+ New Record",
+  "pwd.dashboard.search_ph":  "Search by name…",
+
+  "pwd.table.name":    "Name",
+  "pwd.table.url":     "URL",
+  "pwd.table.account": "Account",
+  "pwd.table.note1":   "Note 1",
+  "pwd.table.note2":   "Note 2",
+  "pwd.table.actions": "Actions",
+
+  "pwd.record.view_pwd": "View Password",
+  "pwd.record.edit":     "Edit",
+  "pwd.record.delete":   "Delete",
+
+  "pwd.add_record.title":  "New Record",
+  "pwd.edit_record.title": "Edit Record",
+  "pwd.record.name":       "Name",
+  "pwd.record.url":        "URL",
+  "pwd.record.account":    "Account",
+  "pwd.record.password":   "Password",
+  "pwd.record.password_edit_label": "Password (leave blank to keep current)",
+  "pwd.record.password_edit_ph":    "Leave blank to keep current",
+  "pwd.record.name_ph":    "Website or service name",
+  "pwd.record.url_ph":     "https://...",
+  "pwd.record.account_ph": "Username or email",
+  "pwd.record.note1":      "Note 1",
+  "pwd.record.note2":      "Note 2",
+  "pwd.record.note_ph":    "Additional notes…",
+
+  "pwd.reveal.title":           "View Password",
+  "pwd.reveal.desc_prefix":     "Enter second-layer password to view: ",
+  "pwd.reveal.password2_ph":    "Second-layer password",
+  "pwd.reveal.submit":          "Confirm",
+  "pwd.reveal.auto_close":      "Password will be cleared in",
+  "pwd.reveal.auto_close_unit": "seconds",
+  "pwd.reveal.copy":            "Copy",
+  "pwd.reveal.copied":          "Copied",
+
+  "pwd.delete_record.title":          "Confirm Delete",
+  "pwd.delete_record.confirm_prefix": "Are you sure you want to delete \"",
+  "pwd.delete_record.confirm_suffix": "\"? This action cannot be undone.",
+  "pwd.delete_record.submit":         "Delete",
+
+  "pwd.flash.fill_all":   "Please fill in all fields.",
+  "pwd.flash.pwd_same":   "The two passwords must not be identical.",
+  "pwd.flash.db_created": "Database \"{name}\" has been created.",
+  "pwd.flash.db_missing": "Database not found.",
+  "pwd.flash.auth_error": "Invalid username or password.",
+
+  "pwd.api.not_logged_in":    "Not authenticated.",
+  "pwd.api.invalid_data":     "Invalid request data.",
+  "pwd.api.name_required":    "Name is required.",
+  "pwd.api.record_not_found": "Record not found.",
+  "pwd.api.pwd2_wrong":       "Incorrect second-layer password.",
+  "pwd.api.db_not_found":     "Database not found.",
+  "pwd.api.auth_error":       "Invalid username or password.",
+
+  "js.loading":            "Loading…",
+  "js.load_failed":        "Failed to load: ",
+  "js.no_records":         "No records found. Click \"+ New Record\" to create one.",
+  "js.save_failed":        "Failed to save: ",
+  "js.load_record_failed": "Failed to load record: ",
+  "js.delete_failed":      "Failed to delete: "
+}

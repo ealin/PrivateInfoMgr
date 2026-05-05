@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="{{ current_lang }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}密碼管理系統{% endblock %}</title>
+  <title>{% block title %}{{ t('pwd.brand') }}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+
+  <div class="lang-switcher">
+    {% for lang in supported_langs %}
+    <form method="POST" action="{{ url_for('set_lang') }}" style="display:inline">
+      <input type="hidden" name="lang" value="{{ lang.code }}">
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="lang-btn{% if lang.code == current_lang %} lang-btn--active{% endif %}">{{ lang.label }}</button>
+    </form>
+    {% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+    {% endfor %}
+  </div>
+
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <div class="flash-container">
@@ -19,6 +31,28 @@
 
   {% block content %}{% endblock %}
 
+  {% set T_data = {
+    'login_suffix':       t('pwd.login.title'),
+    'fill_all':           t('pwd.flash.fill_all'),
+    'loading':            t('js.loading'),
+    'load_failed':        t('js.load_failed'),
+    'no_records':         t('js.no_records'),
+    'save_failed':        t('js.save_failed'),
+    'load_record_failed': t('js.load_record_failed'),
+    'delete_failed':      t('js.delete_failed'),
+    'add_record_title':   t('pwd.add_record.title'),
+    'edit_record_title':  t('pwd.edit_record.title'),
+    'password_label':     t('pwd.record.password'),
+    'password_edit_label':t('pwd.record.password_edit_label'),
+    'password_edit_ph':   t('pwd.record.password_edit_ph'),
+    'name_required':      t('pwd.api.name_required'),
+    'copy':               t('pwd.reveal.copy'),
+    'copied':             t('pwd.reveal.copied'),
+    'view_pwd':           t('pwd.record.view_pwd'),
+    'edit':               t('pwd.record.edit'),
+    'delete':             t('pwd.record.delete')
+  } %}
+  <script>window.T = {{ T_data | tojson }};</script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

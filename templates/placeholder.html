@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="{{ current_lang }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title }} — Ealin 私人資訊管理系統</title>
+  <title>{{ t(module_key) }} — {{ t('home.title') }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
     .ph-wrap {
@@ -17,10 +17,22 @@
   </style>
 </head>
 <body>
+
+<div class="lang-switcher">
+  {% for lang in supported_langs %}
+  <form method="POST" action="{{ url_for('set_lang') }}" style="display:inline">
+    <input type="hidden" name="lang" value="{{ lang.code }}">
+    <input type="hidden" name="next" value="{{ request.path }}">
+    <button type="submit" class="lang-btn{% if lang.code == current_lang %} lang-btn--active{% endif %}">{{ lang.label }}</button>
+  </form>
+  {% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+  {% endfor %}
+</div>
+
 <div class="ph-wrap">
-  <h1 class="ph-title">{{ title }}</h1>
-  <p class="ph-note">此功能尚在開發中，敬請期待。</p>
-  <a href="{{ url_for('home') }}" class="btn btn--ghost">← 返回主畫面</a>
+  <h1 class="ph-title">{{ t(module_key) }}</h1>
+  <p class="ph-note">{{ t('placeholder.body') }}</p>
+  <a href="{{ url_for('home') }}" class="btn btn--ghost">{{ t('placeholder.back') }}</a>
 </div>
 </body>
 </html>

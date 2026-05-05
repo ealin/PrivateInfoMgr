@@ -5,8 +5,9 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('templates', 'templates'),
-        ('static',    'static'),
+        ('templates',     'templates'),
+        ('static',        'static'),
+        ('translations',  'translations'),
     ],
     hiddenimports=[
         # argon2-cffi internals

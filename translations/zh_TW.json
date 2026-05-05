@@ -1,0 +1,117 @@
+{
+  "lang.zh_TW": "繁中",
+  "lang.en": "EN",
+
+  "home.title":       "Ealin 私人資訊管理系統",
+  "home.subtitle":    "選擇功能模組",
+  "home.coming_soon": "即將推出",
+
+  "module.pwd":         "密碼管理",
+  "module.places":      "我想去的",
+  "module.bucket_list": "人生待完成項目清單",
+
+  "placeholder.body": "此功能尚在開發中，敬請期待。",
+  "placeholder.back": "← 返回主畫面",
+
+  "common.cancel":    "取消",
+  "common.save":      "儲存",
+  "common.back_home": "← 返回主畫面",
+  "common.logout":    "登出",
+  "common.home":      "主畫面",
+
+  "pwd.brand":      "密碼管理系統",
+  "pwd.page_title": "選擇資料庫 — 密碼管理系統",
+
+  "pwd.select_db.section": "選擇資料庫",
+  "pwd.select_db.no_db":   "尚無資料庫，請建立第一個資料庫。",
+  "pwd.select_db.delete_tooltip": "刪除資料庫",
+
+  "pwd.create_db.section":      "建立新資料庫",
+  "pwd.create_db.name_label":   "資料庫名稱",
+  "pwd.create_db.name_ph":      "例：個人、工作",
+  "pwd.create_db.submit":       "建立資料庫",
+
+  "pwd.login.title":  "登入",
+  "pwd.login.submit": "登入",
+
+  "pwd.delete_db.title":          "刪除資料庫",
+  "pwd.delete_db.confirm_prefix": "刪除「",
+  "pwd.delete_db.confirm_suffix": "」後無法復原，請輸入帳號與兩層密碼確認。",
+  "pwd.delete_db.submit":         "確認刪除",
+
+  "pwd.field.username":       "帳號",
+  "pwd.field.username_ph":    "請輸入帳號",
+  "pwd.field.username_new_ph":"登入帳號",
+  "pwd.field.password1":      "第一層密碼",
+  "pwd.field.password1_ph":   "第一層密碼",
+  "pwd.field.password1_new_ph":"用於登入驗證",
+  "pwd.field.password2":      "第二層密碼",
+  "pwd.field.password2_ph":   "第二層密碼",
+  "pwd.field.password2_new_ph":"用於查看密碼，不可與第一層相同",
+
+  "pwd.dashboard.page_title":    "密碼記錄",
+  "pwd.dashboard.current_db":    "目前資料庫",
+  "pwd.dashboard.new_record":    "+ 新增記錄",
+  "pwd.dashboard.search_ph":     "搜尋名稱…",
+
+  "pwd.table.name":    "名稱",
+  "pwd.table.url":     "網址",
+  "pwd.table.account": "帳號",
+  "pwd.table.note1":   "附註 1",
+  "pwd.table.note2":   "附註 2",
+  "pwd.table.actions": "操作",
+
+  "pwd.record.view_pwd": "查看密碼",
+  "pwd.record.edit":     "編輯",
+  "pwd.record.delete":   "刪除",
+
+  "pwd.add_record.title":  "新增記錄",
+  "pwd.edit_record.title": "編輯記錄",
+  "pwd.record.name":       "名稱",
+  "pwd.record.url":        "網址",
+  "pwd.record.account":    "帳號",
+  "pwd.record.password":   "密碼",
+  "pwd.record.password_edit_label": "密碼（留空表示不修改）",
+  "pwd.record.password_edit_ph":    "留空表示不修改",
+  "pwd.record.name_ph":    "網站或服務名稱",
+  "pwd.record.url_ph":     "https://...",
+  "pwd.record.account_ph": "登入帳號或 Email",
+  "pwd.record.note1":      "附註 1",
+  "pwd.record.note2":      "附註 2",
+  "pwd.record.note_ph":    "備注資訊…",
+
+  "pwd.reveal.title":           "查看密碼",
+  "pwd.reveal.desc_prefix":     "請輸入第二層密碼以查看：",
+  "pwd.reveal.password2_ph":    "第二層密碼",
+  "pwd.reveal.submit":          "確認",
+  "pwd.reveal.auto_close":      "密碼將在",
+  "pwd.reveal.auto_close_unit": "秒後自動清除",
+  "pwd.reveal.copy":            "複製",
+  "pwd.reveal.copied":          "已複製",
+
+  "pwd.delete_record.title":          "確認刪除",
+  "pwd.delete_record.confirm_prefix": "確定要刪除「",
+  "pwd.delete_record.confirm_suffix": "」嗎？此操作無法復原。",
+  "pwd.delete_record.submit":         "刪除",
+
+  "pwd.flash.fill_all":   "請填寫所有欄位",
+  "pwd.flash.pwd_same":   "兩層密碼不能相同",
+  "pwd.flash.db_created": "資料庫「{name}」已建立",
+  "pwd.flash.db_missing": "資料庫不存在",
+  "pwd.flash.auth_error": "帳號或密碼錯誤",
+
+  "pwd.api.not_logged_in":    "未登入",
+  "pwd.api.invalid_data":     "無效資料",
+  "pwd.api.name_required":    "名稱為必填",
+  "pwd.api.record_not_found": "記錄不存在",
+  "pwd.api.pwd2_wrong":       "第二層密碼錯誤",
+  "pwd.api.db_not_found":     "資料庫不存在",
+  "pwd.api.auth_error":       "帳號或密碼錯誤",
+
+  "js.loading":            "載入中…",
+  "js.load_failed":        "載入失敗：",
+  "js.no_records":         "尚無記錄，請點擊「新增記錄」。",
+  "js.save_failed":        "儲存失敗：",
+  "js.load_record_failed": "載入記錄失敗：",
+  "js.delete_failed":      "刪除失敗："
+}

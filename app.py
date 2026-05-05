@@ -5,15 +5,19 @@ Routes:
   /              → 入口頁面
   /places/       → 我想去的（placeholder）
   /bucket-list/  → 人生待完成項目清單（placeholder）
+  /set-lang      → 切換語言
   /pwd/...       → 密碼管理子系統（Blueprint）
 """
 
 import os
 
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request, session, url_for
 
 import config
 from blueprints.pwd.routes import pwd_bp
+from i18n import DEFAULT_LANG, SUPPORTED_LANGS, get_locale, lang_options
+from i18n import load_translations
+from i18n import t as _t
 
 app = Flask(__name__,
             template_folder=os.path.join(config.BUNDLE_DIR, 'templates'),
@@ -22,7 +26,26 @@ app.secret_key = config.SECRET_KEY
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
+load_translations()
 app.register_blueprint(pwd_bp)
+
+
+@app.context_processor
+def inject_i18n():
+    return {
+        't':               _t,
+        'current_lang':    get_locale(),
+        'supported_langs': lang_options(),
+    }
+
+
+@app.route('/set-lang', methods=['POST'])
+def set_lang():
+    lang = request.form.get('lang', DEFAULT_LANG)
+    if lang in SUPPORTED_LANGS:
+        session['lang'] = lang
+    next_url = request.form.get('next') or request.referrer or url_for('home')
+    return redirect(next_url)
 
 
 @app.route('/')
@@ -32,12 +55,12 @@ def home():
 
 @app.route('/places/')
 def places():
-    return render_template('placeholder.html', title='我想去的')
+    return render_template('placeholder.html', module_key='module.places')
 
 
 @app.route('/bucket-list/')
 def bucket_list():
-    return render_template('placeholder.html', title='人生待完成項目清單')
+    return render_template('placeholder.html', module_key='module.bucket_list')
 
 
 if __name__ == '__main__':

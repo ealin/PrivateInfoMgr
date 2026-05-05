@@ -14,6 +14,7 @@ import config
 from crypto import (decrypt_field, decrypt_master_key, encrypt_field,
                     encrypt_master_key, generate_master_key, hash_password,
                     verify_password)
+from i18n import t
 from models import (create_record, create_user, delete_record, get_all_records,
                     get_record, get_user, init_db, load_db_index,
                     save_db_index, update_record)
@@ -62,7 +63,7 @@ def require_auth(f):
     def decorated(*args, **kwargs):
         if _get_session() is None:
             if request.is_json:
-                return jsonify({'error': '未登入'}), 401
+                return jsonify({'error': t('pwd.api.not_logged_in')}), 401
             return redirect(url_for('pwd.index'))
         return f(*args, **kwargs)
     return decorated
@@ -86,10 +87,10 @@ def create_db():
     password2    = request.form.get('password2', '')
 
     if not all([display_name, username, password1, password2]):
-        flash('請填寫所有欄位', 'error')
+        flash(t('pwd.flash.fill_all'), 'error')
         return redirect(url_for('pwd.index'))
     if password1 == password2:
-        flash('兩層密碼不能相同', 'error')
+        flash(t('pwd.flash.pwd_same'), 'error')
         return redirect(url_for('pwd.index'))
 
     db_file = uuid.uuid4().hex + '.db'
@@ -108,7 +109,7 @@ def create_db():
 
     token = _new_session(master_key, db_file, username)
     session['token'] = token
-    flash(f'資料庫「{display_name}」已建立', 'success')
+    flash(t('pwd.flash.db_created', name=display_name), 'success')
     return redirect(url_for('pwd.dashboard'))
 
 
@@ -121,26 +122,25 @@ def login():
 
     known_files = {d['file'] for d in load_db_index()}
     if db_file not in known_files:
-        flash('資料庫不存在', 'error')
+        flash(t('pwd.flash.db_missing'), 'error')
         return redirect(url_for('pwd.index'))
 
-    error_msg = '帳號或密碼錯誤'
     user = get_user(db_file, username)
     if not user:
-        flash(error_msg, 'error')
+        flash(t('pwd.flash.auth_error'), 'error')
         return redirect(url_for('pwd.index'))
     if not verify_password(user['password1_hash'], password1):
-        flash(error_msg, 'error')
+        flash(t('pwd.flash.auth_error'), 'error')
         return redirect(url_for('pwd.index'))
     if not verify_password(user['password2_hash'], password2):
-        flash(error_msg, 'error')
+        flash(t('pwd.flash.auth_error'), 'error')
         return redirect(url_for('pwd.index'))
 
     try:
         master_key = decrypt_master_key(
             user['encrypted_master_key'], password2, user['master_key_salt'])
     except Exception:
-        flash(error_msg, 'error')
+        flash(t('pwd.flash.auth_error'), 'error')
         return redirect(url_for('pwd.index'))
 
     token = _new_session(master_key, db_file, username)
@@ -165,16 +165,15 @@ def delete_db():
     idx = load_db_index()
     known = {d['file'] for d in idx}
     if db_file not in known:
-        return jsonify({'error': '資料庫不存在'}), 404
+        return jsonify({'error': t('pwd.api.db_not_found')}), 404
 
-    error_msg = '帳號或密碼錯誤'
     user = get_user(db_file, username)
     if not user:
-        return jsonify({'error': error_msg}), 403
+        return jsonify({'error': t('pwd.api.auth_error')}), 403
     if not verify_password(user['password1_hash'], password1):
-        return jsonify({'error': error_msg}), 403
+        return jsonify({'error': t('pwd.api.auth_error')}), 403
     if not verify_password(user['password2_hash'], password2):
-        return jsonify({'error': error_msg}), 403
+        return jsonify({'error': t('pwd.api.auth_error')}), 403
 
     db_full_path = os.path.join(config.DATA_DIR, db_file)
     if os.path.exists(db_full_path):
@@ -225,9 +224,9 @@ def api_create_record():
     sess = _get_session()
     data = request.get_json()
     if not data:
-        return jsonify({'error': '無效資料'}), 400
+        return jsonify({'error': t('pwd.api.invalid_data')}), 400
     if not data.get('name', '').strip():
-        return jsonify({'error': '名稱為必填'}), 400
+        return jsonify({'error': t('pwd.api.name_required')}), 400
 
     mk = sess.master_key
     record_id = create_record(
@@ -248,7 +247,7 @@ def api_get_record(record_id):
     sess   = _get_session()
     record = get_record(sess.db_file, record_id)
     if not record:
-        return jsonify({'error': '記錄不存在'}), 404
+        return jsonify({'error': t('pwd.api.record_not_found')}), 404
     mk = sess.master_key
     return jsonify({
         'id':      record['id'],
@@ -266,13 +265,13 @@ def api_update_record(record_id):
     sess   = _get_session()
     record = get_record(sess.db_file, record_id)
     if not record:
-        return jsonify({'error': '記錄不存在'}), 404
+        return jsonify({'error': t('pwd.api.record_not_found')}), 404
 
     data = request.get_json()
     if not data:
-        return jsonify({'error': '無效資料'}), 400
+        return jsonify({'error': t('pwd.api.invalid_data')}), 400
     if not data.get('name', '').strip():
-        return jsonify({'error': '名稱為必填'}), 400
+        return jsonify({'error': t('pwd.api.name_required')}), 400
 
     mk = sess.master_key
     new_password = data.get('password', '')
@@ -298,7 +297,7 @@ def api_delete_record(record_id):
     sess   = _get_session()
     record = get_record(sess.db_file, record_id)
     if not record:
-        return jsonify({'error': '記錄不存在'}), 404
+        return jsonify({'error': t('pwd.api.record_not_found')}), 404
     delete_record(sess.db_file, record_id)
     return jsonify({'success': True})
 
@@ -309,16 +308,16 @@ def api_reveal_password(record_id):
     sess = _get_session()
     data = request.get_json()
     if not data:
-        return jsonify({'error': '無效資料'}), 400
+        return jsonify({'error': t('pwd.api.invalid_data')}), 400
 
     password2 = data.get('password2', '')
     user = get_user(sess.db_file, sess.username)
     if not user or not verify_password(user['password2_hash'], password2):
-        return jsonify({'error': '第二層密碼錯誤'}), 403
+        return jsonify({'error': t('pwd.api.pwd2_wrong')}), 403
 
     record = get_record(sess.db_file, record_id)
     if not record:
-        return jsonify({'error': '記錄不存在'}), 404
+        return jsonify({'error': t('pwd.api.record_not_found')}), 404
 
     password = decrypt_field(record['enc_password'], sess.master_key)
     return jsonify({'password': password})

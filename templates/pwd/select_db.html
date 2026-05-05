@@ -1,5 +1,5 @@
 {% extends "pwd/base.html" %}
-{% block title %}選擇資料庫 — 密碼管理系統{% endblock %}
+{% block title %}{{ t('pwd.page_title') }}{% endblock %}
 
 {% block content %}
 <div class="center-wrap">
@@ -9,13 +9,13 @@
       <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       <circle cx="12" cy="16" r="1" fill="currentColor" stroke="none"/>
     </svg>
-    <h1 class="brand-title">密碼管理系統</h1>
+    <h1 class="brand-title">{{ t('pwd.brand') }}</h1>
   </div>
 
   <!-- Existing databases -->
   {% if databases %}
   <section class="card">
-    <h2 class="section-title">選擇資料庫</h2>
+    <h2 class="section-title">{{ t('pwd.select_db.section') }}</h2>
     <div class="db-list">
       {% for db in databases %}
       <div class="db-row">
@@ -30,7 +30,7 @@
             <polyline points="9 18 15 12 9 6"/>
           </svg>
         </button>
-        <button class="db-delete-btn" data-db-file="{{ db.file }}" data-db-name="{{ db.display_name }}" title="刪除資料庫">
+        <button class="db-delete-btn" data-db-file="{{ db.file }}" data-db-name="{{ db.display_name }}" title="{{ t('pwd.select_db.delete_tooltip') }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <polyline points="3 6 5 6 21 6"/>
             <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
@@ -43,73 +43,73 @@
     </div>
   </section>
   {% else %}
-  <p class="hint-text">尚無資料庫，請建立第一個資料庫。</p>
+  <p class="hint-text">{{ t('pwd.select_db.no_db') }}</p>
   {% endif %}
 
   <!-- Create new database -->
   <section class="card">
-    <h2 class="section-title">建立新資料庫</h2>
+    <h2 class="section-title">{{ t('pwd.create_db.section') }}</h2>
     <form method="POST" action="{{ url_for('pwd.create_db') }}" id="createDbForm">
       <div class="form-group">
-        <label>資料庫名稱</label>
-        <input type="text" name="display_name" placeholder="例：個人、工作" required autocomplete="off">
+        <label>{{ t('pwd.create_db.name_label') }}</label>
+        <input type="text" name="display_name" placeholder="{{ t('pwd.create_db.name_ph') }}" required autocomplete="off">
       </div>
       <div class="form-group">
-        <label>帳號</label>
-        <input type="text" name="username" placeholder="登入帳號" required autocomplete="off">
+        <label>{{ t('pwd.field.username') }}</label>
+        <input type="text" name="username" placeholder="{{ t('pwd.field.username_new_ph') }}" required autocomplete="off">
       </div>
       <div class="form-group">
-        <label>第一層密碼</label>
+        <label>{{ t('pwd.field.password1') }}</label>
         <div class="input-wrap">
-          <input type="password" name="password1" placeholder="用於登入驗證" required autocomplete="new-password" id="create_p1">
+          <input type="password" name="password1" placeholder="{{ t('pwd.field.password1_new_ph') }}" required autocomplete="new-password" id="create_p1">
           <button type="button" class="toggle-pw" data-target="create_p1">&#9679;</button>
         </div>
       </div>
       <div class="form-group">
-        <label>第二層密碼</label>
+        <label>{{ t('pwd.field.password2') }}</label>
         <div class="input-wrap">
-          <input type="password" name="password2" placeholder="用於查看密碼，不可與第一層相同" required autocomplete="new-password" id="create_p2">
+          <input type="password" name="password2" placeholder="{{ t('pwd.field.password2_new_ph') }}" required autocomplete="new-password" id="create_p2">
           <button type="button" class="toggle-pw" data-target="create_p2">&#9679;</button>
         </div>
       </div>
-      <button type="submit" class="btn btn--primary btn--full">建立資料庫</button>
+      <button type="submit" class="btn btn--primary btn--full">{{ t('pwd.create_db.submit') }}</button>
     </form>
   </section>
 
-  <a href="{{ url_for('home') }}" class="back-link">← 返回主畫面</a>
+  <a href="{{ url_for('home') }}" class="back-link">{{ t('common.back_home') }}</a>
 </div>
 
 <!-- Delete database modal -->
 <div id="deleteDbModal" class="modal" hidden>
   <div class="modal-box">
     <div class="modal-header">
-      <h3>刪除資料庫</h3>
+      <h3>{{ t('pwd.delete_db.title') }}</h3>
       <button class="modal-close" id="deleteDbModalClose">&times;</button>
     </div>
-    <p class="modal-desc">刪除「<strong id="deleteDbName"></strong>」後無法復原，請輸入帳號與兩層密碼確認。</p>
+    <p class="modal-desc">{{ t('pwd.delete_db.confirm_prefix') }}<strong id="deleteDbName"></strong>{{ t('pwd.delete_db.confirm_suffix') }}</p>
     <input type="hidden" id="deleteDbFile">
     <div class="form-group">
-      <label>帳號</label>
-      <input type="text" id="deleteDbUsername" placeholder="請輸入帳號" autocomplete="off">
+      <label>{{ t('pwd.field.username') }}</label>
+      <input type="text" id="deleteDbUsername" placeholder="{{ t('pwd.field.username_ph') }}" autocomplete="off">
     </div>
     <div class="form-group">
-      <label>第一層密碼</label>
+      <label>{{ t('pwd.field.password1') }}</label>
       <div class="input-wrap">
-        <input type="password" id="deleteDb_p1" placeholder="第一層密碼" autocomplete="new-password">
+        <input type="password" id="deleteDb_p1" placeholder="{{ t('pwd.field.password1_ph') }}" autocomplete="new-password">
         <button type="button" class="toggle-pw" data-target="deleteDb_p1">&#9679;</button>
       </div>
     </div>
     <div class="form-group">
-      <label>第二層密碼</label>
+      <label>{{ t('pwd.field.password2') }}</label>
       <div class="input-wrap">
-        <input type="password" id="deleteDb_p2" placeholder="第二層密碼" autocomplete="new-password">
+        <input type="password" id="deleteDb_p2" placeholder="{{ t('pwd.field.password2_ph') }}" autocomplete="new-password">
         <button type="button" class="toggle-pw" data-target="deleteDb_p2">&#9679;</button>
       </div>
     </div>
     <div id="deleteDbError" class="error-msg" hidden></div>
     <div class="form-actions" style="margin-top:20px">
-      <button class="btn btn--ghost" id="deleteDbCancelBtn">取消</button>
-      <button class="btn btn--danger" id="deleteDbConfirmBtn">確認刪除</button>
+      <button class="btn btn--ghost" id="deleteDbCancelBtn">{{ t('common.cancel') }}</button>
+      <button class="btn btn--danger" id="deleteDbConfirmBtn">{{ t('pwd.delete_db.submit') }}</button>
     </div>
   </div>
 </div>
@@ -118,30 +118,30 @@
 <div id="loginModal" class="modal" hidden>
   <div class="modal-box">
     <div class="modal-header">
-      <h3 id="loginModalTitle">登入</h3>
+      <h3 id="loginModalTitle">{{ t('pwd.login.title') }}</h3>
       <button class="modal-close" id="loginModalClose">&times;</button>
     </div>
     <form method="POST" action="{{ url_for('pwd.login') }}" id="loginForm">
       <input type="hidden" name="db_file" id="loginDbFile">
       <div class="form-group">
-        <label>帳號</label>
-        <input type="text" name="username" placeholder="請輸入帳號" required autocomplete="off" id="loginUsername">
+        <label>{{ t('pwd.field.username') }}</label>
+        <input type="text" name="username" placeholder="{{ t('pwd.field.username_ph') }}" required autocomplete="off" id="loginUsername">
       </div>
       <div class="form-group">
-        <label>第一層密碼</label>
+        <label>{{ t('pwd.field.password1') }}</label>
         <div class="input-wrap">
-          <input type="password" name="password1" placeholder="第一層密碼" required autocomplete="current-password" id="login_p1">
+          <input type="password" name="password1" placeholder="{{ t('pwd.field.password1_ph') }}" required autocomplete="current-password" id="login_p1">
           <button type="button" class="toggle-pw" data-target="login_p1">&#9679;</button>
         </div>
       </div>
       <div class="form-group">
-        <label>第二層密碼</label>
+        <label>{{ t('pwd.field.password2') }}</label>
         <div class="input-wrap">
-          <input type="password" name="password2" placeholder="第二層密碼" required autocomplete="current-password" id="login_p2">
+          <input type="password" name="password2" placeholder="{{ t('pwd.field.password2_ph') }}" required autocomplete="current-password" id="login_p2">
           <button type="button" class="toggle-pw" data-target="login_p2">&#9679;</button>
         </div>
       </div>
-      <button type="submit" class="btn btn--primary btn--full">登入</button>
+      <button type="submit" class="btn btn--primary btn--full">{{ t('pwd.login.submit') }}</button>
     </form>
   </div>
 </div>
