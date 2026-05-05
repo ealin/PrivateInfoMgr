@@ -1,2 +1,139 @@
-# PrivateInfoMgr
-Manage your provate information, include password、wish and todo list...
+# Ealin 私人資訊管理系統
+
+本地端個人私密資訊管理系統，以瀏覽器作為操作介面，所有資料加密儲存於本機，原始碼或資料庫檔案外洩亦無法被破譯。
+
+---
+
+## 功能說明
+
+### 入口頁面
+- 統一入口，提供各功能模組的快速連結
+
+### 密碼管理（已完成）
+- **多資料庫支援**：可建立多個獨立資料庫，各自擁有不同帳號與密碼
+- **兩層密碼驗證**：登入需輸入帳號 + 第一層密碼 + 第二層密碼
+- **查看密碼保護**：列表不顯示密碼欄位；查看單筆密碼需再次輸入第二層密碼
+- **自動關閉彈窗**：密碼顯示彈窗在 20 秒後自動清除，或按 ESC / 手動關閉
+- **資料欄位**：名稱、網址、帳號、密碼、附註 1、附註 2
+- **名稱搜尋**：即時搜尋過濾，附清除按鈕
+- **刪除資料庫**：需通過帳號與兩層密碼驗證才可刪除
+
+### 我想去的（規劃中）
+- 收藏想前往的地點、景點與旅遊計劃
+
+### 人生待完成項目清單（規劃中）
+- 記錄人生中想完成的事項與目標
+
+---
+
+## 安全設計
+
+| 機制 | 說明 |
+|------|------|
+| Argon2id | 所有密碼以業界標準雜湊演算法儲存，抗暴力破解 |
+| AES-256-GCM | 所有記錄欄位（含名稱、帳號、密碼等）全部加密 |
+| PBKDF2-SHA256 | 以第二層密碼衍生加密金鑰，600,000 次迭代 |
+| Master Key | 隨機產生，加密後才存入磁碟，明文只存在於伺服器記憶體 |
+| Session 設計 | Cookie 只存隨機 Token，Master Key 不寫入任何持久化儲存 |
+
+---
+
+## 本機安裝與執行
+
+### 環境需求
+
+- macOS（開發及測試環境）
+- Python 3.11 以上
+
+### 安裝步驟
+
+```bash
+# 1. 取得原始碼
+git clone https://github.com/ealin/PrivateInfoMgr.git
+cd PrivateInfoMgr
+
+# 2. 建立虛擬環境並安裝依賴
+python3 -m venv venv
+venv/bin/pip install -r requirements.txt
+
+# 3. 啟動伺服器
+venv/bin/python app.py
+```
+
+### 開啟介面
+
+瀏覽器前往：[http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+首次使用請點選「密碼管理」→「建立新資料庫」，設定帳號與兩層密碼。
+
+---
+
+## 打包為 macOS 應用程式
+
+可將系統打包為雙擊即可執行的 `.app`，啟動後自動開啟瀏覽器，並在選單列顯示 🔐 圖示。
+
+```bash
+# 安裝打包工具
+venv/bin/pip install pyinstaller rumps
+
+# 執行打包
+bash build.sh
+```
+
+完成後應用程式位於 `dist/PWDManager.app`。
+
+打包版的資料庫儲存路徑：
+```
+~/Library/Application Support/PWDManager/
+```
+
+> 首次執行若出現「無法驗證開發者」：系統設定 → 隱私與安全性 → 仍要開啟
+
+---
+
+## 資料備份與移植
+
+| 執行方式 | 資料位置 |
+|----------|---------|
+| 開發模式（`python app.py`）| 專案目錄下的 `data/` |
+| 打包版（`PWDManager.app`）| `~/Library/Application Support/PWDManager/` |
+
+備份只需複製整個資料目錄（含 `index.json` 與所有 `.db` 檔案）。  
+移植到新機器時，將 `.db` 複製至目標資料夾，並在 `index.json` 中新增對應項目即可。
+
+> `data/` 目錄已列入 `.gitignore`，不會上傳至版本控制。
+
+---
+
+## 擴充計劃
+
+- [ ] **我想去的**：地點收藏、分類標籤、地圖連結
+- [ ] **人生待完成項目清單**：分類管理、完成狀態追蹤、截止日期
+- [ ] **密碼產生器**：依規則隨機產生強密碼
+- [ ] **修改密碼功能**：允許更換帳號兩層密碼（需重新加密 Master Key）
+- [ ] **資料匯出**：加密封存檔備份
+- [ ] **閒置自動登出**：超過指定時間自動清除 session
+
+---
+
+## 技術架構
+
+```
+PrivateInfoMgr/
+├── app.py                  # Flask 主程式（入口頁、Blueprint 註冊）
+├── config.py               # 路徑設定（開發 / 打包模式自動切換）
+├── crypto.py               # 加密核心（Argon2id / AES-256-GCM / PBKDF2）
+├── models.py               # SQLite 資料存取層
+├── main.py                 # macOS .app 進入點（rumps 選單列）
+├── blueprints/
+│   └── pwd/routes.py       # 密碼管理 Blueprint（所有路由與 API）
+├── templates/
+│   ├── home.html           # 入口頁面
+│   ├── placeholder.html    # 功能規劃中頁面
+│   └── pwd/                # 密碼管理相關頁面
+├── static/
+│   ├── css/style.css       # 深色主題 UI
+│   └── js/app.js           # 前端邏輯
+├── PWDManager.spec         # PyInstaller 打包設定
+└── build.sh                # 一鍵打包腳本
+```
