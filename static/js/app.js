@@ -50,7 +50,7 @@ if (loginModal) {
   document.querySelectorAll('.db-item').forEach(btn => {
     btn.addEventListener('click', () => {
       loginDbFile.value     = btn.dataset.dbFile;
-      loginModalTitle.textContent = btn.dataset.dbName + ' — 登入';
+      loginModalTitle.textContent = btn.dataset.dbName + ' — ' + (window.T ? T.login_suffix : '');
       $('loginUsername').value = '';
       $('login_p1').value = '';
       $('login_p2').value = '';
@@ -104,7 +104,7 @@ if (deleteDbModal) {
     const p2       = $('deleteDb_p2').value;
 
     if (!username || !p1 || !p2) {
-      deleteDbError.textContent = '請填寫所有欄位';
+      deleteDbError.textContent = window.T ? T.fill_all : '';
       deleteDbError.hidden = false;
       return;
     }
@@ -145,14 +145,14 @@ else {
       renderRecords(allRecords);
     } catch (err) {
       recordsTbody.innerHTML =
-        `<tr><td colspan="6" class="text-center text-muted">載入失敗：${err.message}</td></tr>`;
+        `<tr><td colspan="6" class="text-center text-muted">${T.load_failed}${err.message}</td></tr>`;
     }
   }
 
   function renderRecords(records) {
     if (records.length === 0) {
       recordsTbody.innerHTML =
-        '<tr><td colspan="6" class="text-center text-muted">尚無記錄，請點擊「新增記錄」。</td></tr>';
+        `<tr><td colspan="6" class="text-center text-muted">${T.no_records}</td></tr>`;
       return;
     }
     recordsTbody.innerHTML = records.map(r => `
@@ -164,9 +164,9 @@ else {
         <td class="cell-note">${r.note2 || '<span class="cell-empty">—</span>'}</td>
         <td>
           <div class="td-actions">
-            <button class="btn btn--ghost btn--sm" onclick="openReveal(${r.id}, '${esc(r.name)}')">查看密碼</button>
-            <button class="btn btn--ghost btn--sm" onclick="openEdit(${r.id})">編輯</button>
-            <button class="btn btn--ghost btn--sm" style="color:var(--danger)" onclick="openDelete(${r.id}, '${esc(r.name)}')">刪除</button>
+            <button class="btn btn--ghost btn--sm" onclick="openReveal(${r.id}, '${esc(r.name)}')">${T.view_pwd}</button>
+            <button class="btn btn--ghost btn--sm" onclick="openEdit(${r.id})">${T.edit}</button>
+            <button class="btn btn--ghost btn--sm" style="color:var(--danger)" onclick="openDelete(${r.id}, '${esc(r.name)}')">${T.delete}</button>
           </div>
         </td>
       </tr>`).join('');
@@ -214,8 +214,8 @@ else {
     $('f_password').value = '';
     $('f_note1').value    = '';
     $('f_note2').value    = '';
-    recordModalTitle.textContent = '新增記錄';
-    pwLabel.textContent = '密碼';
+    recordModalTitle.textContent = T.add_record_title;
+    pwLabel.textContent = T.password_label;
     $('f_password').placeholder = '';
     show(recordModal);
     setTimeout(() => $('f_name').focus(), 60);
@@ -231,13 +231,13 @@ else {
       $('f_password').value = '';
       $('f_note1').value    = r.note1;
       $('f_note2').value    = r.note2;
-      recordModalTitle.textContent = '編輯記錄';
-      pwLabel.textContent = '密碼（留空表示不修改）';
-      $('f_password').placeholder = '留空表示不修改';
+      recordModalTitle.textContent = T.edit_record_title;
+      pwLabel.textContent = T.password_edit_label;
+      $('f_password').placeholder = T.password_edit_ph;
       show(recordModal);
       setTimeout(() => $('f_name').focus(), 60);
     } catch (err) {
-      alert('載入記錄失敗：' + err.message);
+      alert(T.load_record_failed + err.message);
     }
   }
 
@@ -259,7 +259,7 @@ else {
       note1:    $('f_note1').value.trim(),
       note2:    $('f_note2').value.trim(),
     };
-    if (!payload.name) { alert('名稱為必填'); return; }
+    if (!payload.name) { alert(T.name_required); return; }
     const btn = $('recordSubmitBtn');
     btn.disabled = true;
     try {
@@ -271,7 +271,7 @@ else {
       hide(recordModal);
       await loadRecords();
     } catch (err) {
-      alert('儲存失敗：' + err.message);
+      alert(T.save_failed + err.message);
     } finally {
       btn.disabled = false;
     }
@@ -362,8 +362,8 @@ else {
 
   $('copyPwBtn').addEventListener('click', () => {
     navigator.clipboard.writeText(revealResult.textContent).then(() => {
-      $('copyPwBtn').textContent = '已複製';
-      setTimeout(() => { $('copyPwBtn').textContent = '複製'; }, 1500);
+      $('copyPwBtn').textContent = T.copied;
+      setTimeout(() => { $('copyPwBtn').textContent = T.copy; }, 1500);
     });
   });
 
@@ -392,7 +392,7 @@ else {
       hide(deleteModal);
       await loadRecords();
     } catch (err) {
-      alert('刪除失敗：' + err.message);
+      alert(T.delete_failed + err.message);
     } finally {
       btn.disabled = false;
     }

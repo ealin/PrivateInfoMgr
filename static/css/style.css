@@ -1,3 +1,22 @@
+/* ── Language switcher ───────────────────────────────────────────────────── */
+.lang-switcher {
+  position: fixed; top: 12px; right: 16px;
+  z-index: 9000;
+  display: flex; align-items: center; gap: 4px;
+}
+.lang-btn {
+  background: none; border: none;
+  color: var(--text3); font-size: 12px; font-weight: 600;
+  cursor: pointer; padding: 3px 6px;
+  border-radius: var(--radius);
+  transition: color .15s, background .15s;
+  font-family: inherit;
+  letter-spacing: .04em;
+}
+.lang-btn:hover { color: var(--text); background: var(--bg3); }
+.lang-btn--active { color: var(--accent); }
+.lang-sep { color: var(--border); font-size: 11px; user-select: none; }
+
 /* ── Reset & base ─────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
