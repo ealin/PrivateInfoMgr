@@ -1,0 +1,280 @@
+{% extends "places/base.html" %}
+{% block title %}{{ place.name }} — {{ t('places.brand') }}{% endblock %}
+
+{% block content %}
+<style>
+  .detail-grid {
+    display: grid; grid-template-columns: 140px 1fr; gap: 0;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .detail-row { display: contents; }
+  .detail-label {
+    background: var(--bg3); padding: 14px 16px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--text2);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+  }
+  .detail-value {
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14px; display: flex; align-items: center;
+  }
+  .detail-row:last-child .detail-label,
+  .detail-row:last-child .detail-value { border-bottom: none; }
+
+  /* Editable inputs inside detail grid */
+  .detail-value input[type="text"] {
+    width: 100%; background: transparent; border: none; outline: none;
+    color: var(--text); font-size: 14px; font-family: inherit;
+    padding: 0; line-height: 1.6;
+  }
+  .detail-value input[type="text"]:focus {
+    background: var(--bg3); border-radius: 4px;
+    padding: 4px 8px; margin: -4px -8px; width: calc(100% + 16px);
+  }
+  .detail-value textarea {
+    width: 100%; background: transparent; border: none; outline: none;
+    color: var(--text); font-size: 14px; font-family: inherit;
+    resize: vertical; min-height: 80px; line-height: 1.6; padding: 0;
+  }
+  .detail-value textarea:focus {
+    background: var(--bg3); border-radius: 4px;
+    padding: 6px 8px; margin: -6px -8px; width: calc(100% + 16px);
+  }
+  .achieved-row { gap: 10px; }
+
+  .action-bar {
+    display: flex; gap: 10px; align-items: center; padding: 4px 0;
+  }
+  .preview-section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .preview-header {
+    padding: 10px 16px; background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--text2);
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .preview-iframe { width: 100%; height: 480px; border: none; display: block; background: #fff; }
+  .back-link {
+    color: var(--text2); font-size: 13px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .back-link:hover { color: var(--accent); }
+</style>
+
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span>{{ t('places.brand') }}</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">{{ t('places.select_db.section') }}</span>
+      <span class="sidebar-db-name">{{ display_name }}</span>
+    </div>
+    <div class="sidebar-actions">
+      <a href="{{ url_for('places.list_places', db_file=db_file) }}" class="btn btn--ghost btn--full" style="text-decoration:none;text-align:center">{{ t('places.detail.back') }}</a>
+      <a href="{{ url_for('home') }}" class="btn btn--ghost btn--full" style="margin-top:8px;text-decoration:none;text-align:center">{{ t('common.home') }}</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- Back link at top -->
+    <a href="{{ url_for('places.list_places', db_file=db_file) }}" class="back-link">{{ t('places.detail.back') }}</a>
+
+    <div class="content-header">
+      <h2 class="content-title">{{ place.name }}</h2>
+    </div>
+
+    <!-- Editable field grid -->
+    <div class="detail-grid">
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.name') }}</div>
+        <div class="detail-value">
+          <input type="text" id="nameInput" value="{{ place.name }}">
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.address') }}</div>
+        <div class="detail-value">
+          <input type="text" id="addressInput" value="{{ place.address or '' }}">
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.link1') }}</div>
+        <div class="detail-value">
+          <input type="text" id="link1Input" value="{{ place.link1 or '' }}">
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.link2') }}</div>
+        <div class="detail-value">
+          <input type="text" id="link2Input" value="{{ place.link2 or '' }}">
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.achieved') }}</div>
+        <div class="detail-value achieved-row">
+          <input type="checkbox" id="achievedCb"
+                 {% if place.achieved %}checked{% endif %}
+                 style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer">
+          <label for="achievedCb" style="cursor:pointer;font-size:14px">{{ t('places.field.achieved') }}</label>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">{{ t('places.field.note') }}</div>
+        <div class="detail-value">
+          <textarea id="noteArea">{{ place.note or '' }}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action bar (hidden until dirty) -->
+    <div class="action-bar" id="actionBar" hidden>
+      <button class="btn btn--primary" id="saveBtn">{{ t('places.detail.save') }}</button>
+      <button class="btn btn--ghost" id="discardBtn">{{ t('places.detail.discard') }}</button>
+      <span id="saveMsg" style="font-size:13px;color:var(--success);display:none">✓ {{ t('places.flash.saved') }}</span>
+      <span id="errorMsg" style="font-size:13px;color:var(--danger);display:none"></span>
+    </div>
+
+    <!-- Web preview (always rendered; JS shows/hides) -->
+    <div id="previewSection" class="preview-section" {% if not show_preview %}hidden{% endif %}>
+      <div id="previewHeader" class="preview-header">
+        {{ t('places.detail.preview') }}{% if show_preview %} — {{ place.link1 }}{% endif %}
+      </div>
+      <iframe id="previewIframe" class="preview-iframe"
+              src="{{ place.link1 if show_preview else '' }}" loading="lazy"></iframe>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  const nameInput  = document.getElementById('nameInput');
+  const addrInput  = document.getElementById('addressInput');
+  const link1Input = document.getElementById('link1Input');
+  const link2Input = document.getElementById('link2Input');
+  const achievedCb = document.getElementById('achievedCb');
+  const noteArea   = document.getElementById('noteArea');
+  const actionBar  = document.getElementById('actionBar');
+  const saveBtn    = document.getElementById('saveBtn');
+  const discardBtn = document.getElementById('discardBtn');
+  const saveMsg    = document.getElementById('saveMsg');
+  const errorMsg   = document.getElementById('errorMsg');
+  const previewSection = document.getElementById('previewSection');
+  const previewIframe  = document.getElementById('previewIframe');
+  const previewHeader  = document.getElementById('previewHeader');
+
+  const UPDATE_URL   = {{ url_for('places.update_place', db_file=db_file, place_id=place.id) | tojson }};
+  const PREVIEW_LABEL = {{ t('places.detail.preview') | tojson }};
+
+  let orig = snapshot();
+
+  function snapshot() {
+    return {
+      name:     nameInput.value,
+      address:  addrInput.value,
+      link1:    link1Input.value,
+      link2:    link2Input.value,
+      achieved: achievedCb.checked,
+      note:     noteArea.value,
+    };
+  }
+
+  function isDirty() {
+    const cur = snapshot();
+    return Object.keys(orig).some(k => orig[k] !== cur[k]);
+  }
+
+  function isValidUrl(url) {
+    try {
+      const u = new URL(url.trim());
+      return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch { return false; }
+  }
+
+  function refresh() {
+    actionBar.hidden = !isDirty();
+    saveBtn.disabled = false;
+    saveMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+  }
+
+  [nameInput, addrInput, link1Input, link2Input, noteArea].forEach(el =>
+    el.addEventListener('input', refresh));
+  achievedCb.addEventListener('change', refresh);
+
+  saveBtn.addEventListener('click', async () => {
+    const cur = snapshot();
+    if (!cur.name.trim()) {
+      errorMsg.textContent = {{ t('places.flash.name_required') | tojson }};
+      errorMsg.style.display = 'inline';
+      return;
+    }
+    saveBtn.disabled = true;
+    errorMsg.style.display = 'none';
+    try {
+      const resp = await fetch(UPDATE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:     cur.name.trim(),
+          address:  cur.address.trim(),
+          link1:    cur.link1.trim(),
+          link2:    cur.link2.trim(),
+          achieved: cur.achieved ? 1 : 0,
+          note:     cur.note.trim(),
+        }),
+      });
+      if (resp.ok) {
+        orig = snapshot();
+        actionBar.hidden = true;
+        saveMsg.style.display = 'inline';
+        setTimeout(() => { saveMsg.style.display = 'none'; }, 2000);
+
+        // Update iframe preview based on new link1
+        const newLink1 = cur.link1.trim();
+        if (isValidUrl(newLink1)) {
+          previewSection.hidden = false;
+          previewIframe.src = newLink1;
+          previewHeader.textContent = PREVIEW_LABEL + ' — ' + newLink1;
+        } else {
+          previewSection.hidden = true;
+          previewIframe.src = '';
+        }
+      } else {
+        const body = await resp.json().catch(() => ({}));
+        errorMsg.textContent = body.error || 'Error';
+        errorMsg.style.display = 'inline';
+        saveBtn.disabled = false;
+      }
+    } catch (_) {
+      errorMsg.textContent = 'Network error';
+      errorMsg.style.display = 'inline';
+      saveBtn.disabled = false;
+    }
+  });
+
+  discardBtn.addEventListener('click', () => {
+    nameInput.value    = orig.name;
+    addrInput.value    = orig.address;
+    link1Input.value   = orig.link1;
+    link2Input.value   = orig.link2;
+    achievedCb.checked = orig.achieved;
+    noteArea.value     = orig.note;
+    actionBar.hidden   = true;
+    saveMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+  });
+})();
+</script>
+{% endblock %}

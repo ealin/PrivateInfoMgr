@@ -1,0 +1,65 @@
+{% extends "places/base.html" %}
+{% block title %}{{ t('places.add.title') }} — {{ t('places.brand') }}{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span>{{ t('places.brand') }}</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">{{ t('places.select_db.section') }}</span>
+      <span class="sidebar-db-name">{{ display_name }}</span>
+    </div>
+    <div class="sidebar-actions">
+      <a href="{{ url_for('places.list_places', db_file=db_file) }}" class="btn btn--ghost btn--full" style="text-decoration:none;text-align:center">{{ t('places.detail.back') }}</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-header">
+      <h2 class="content-title">{{ t('places.add.title') }}</h2>
+    </div>
+
+    <div class="table-wrap" style="padding:28px 32px">
+      <form method="POST" action="{{ url_for('places.add_place', db_file=db_file) }}">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>{{ t('places.field.name') }} <span class="required">*</span></label>
+            <input type="text" name="name" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label>{{ t('places.field.address') }}</label>
+            <input type="text" name="address" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>{{ t('places.field.link1') }}</label>
+            <input type="url" name="link1" placeholder="https://" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>{{ t('places.field.link2') }}</label>
+            <input type="url" name="link2" placeholder="https://" autocomplete="off">
+          </div>
+          <div class="form-group form-group--full" style="flex-direction:row;align-items:center;gap:10px">
+            <input type="checkbox" name="achieved" id="achieved" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer">
+            <label for="achieved" style="text-transform:none;letter-spacing:normal;font-size:14px;cursor:pointer">{{ t('places.field.achieved') }}</label>
+          </div>
+          <div class="form-group form-group--full">
+            <label>{{ t('places.field.note') }}</label>
+            <textarea name="note" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a href="{{ url_for('places.list_places', db_file=db_file) }}" class="btn btn--ghost">{{ t('common.cancel') }}</a>
+          <button type="submit" class="btn btn--primary">{{ t('places.add.submit') }}</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

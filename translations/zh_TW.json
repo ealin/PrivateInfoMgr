@@ -9,6 +9,45 @@
   "module.pwd":         "密碼管理",
   "module.places":      "我想去的",
   "module.bucket_list": "人生待完成項目清單",
+  "module.stocks":      "零股管理",
+
+  "places.brand":      "我想去的",
+  "places.page_title": "選擇資料庫 — 我想去的",
+
+  "places.select_db.section": "選擇資料庫",
+  "places.select_db.no_db":   "尚無資料庫，請建立第一個資料庫。",
+
+  "places.create_db.section":    "建立新資料庫",
+  "places.create_db.name_label": "資料庫名稱",
+  "places.create_db.name_ph":    "例：旅行、美食",
+  "places.create_db.submit":     "建立資料庫",
+
+  "places.list.title": "我想去的列表",
+  "places.list.add":   "+ 新增地點",
+  "places.list.empty": "尚無記錄，請點擊「新增地點」。",
+
+  "places.field.name":     "地點名稱",
+  "places.field.address":  "地址",
+  "places.field.link1":    "連結1",
+  "places.field.link2":    "連結2",
+  "places.field.achieved": "已達成?",
+  "places.field.note":     "附註",
+
+  "places.add.title":  "新增地點",
+  "places.add.submit": "儲存",
+
+  "places.index":          "我想去的主畫面",
+  "places.app_home":       "私人資訊系統主畫面",
+  "places.detail.back":    "← 返回我想去的列表",
+  "places.detail.preview": "網頁預覽",
+  "places.detail.save":    "儲存",
+  "places.detail.discard": "放棄變更",
+
+  "places.flash.fill_all":      "請填寫地點名稱",
+  "places.flash.name_required": "地點名稱為必填",
+  "places.flash.db_created":    "資料庫「{name}」已建立",
+  "places.flash.db_missing":    "資料庫不存在",
+  "places.flash.not_found":     "記錄不存在",
 
   "placeholder.body": "此功能尚在開發中，敬請期待。",
   "placeholder.back": "← 返回主畫面",

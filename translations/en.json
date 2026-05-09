@@ -9,6 +9,45 @@
   "module.pwd":         "Password Manager",
   "module.places":      "Places I Want to Go",
   "module.bucket_list": "Life Bucket List",
+  "module.stocks":      "Fractional Shares",
+
+  "places.brand":      "Places I Want to Go",
+  "places.page_title": "Select Database — Places",
+
+  "places.select_db.section": "Select Database",
+  "places.select_db.no_db":   "No databases found. Please create your first database.",
+
+  "places.create_db.section":    "Create New Database",
+  "places.create_db.name_label": "Database Name",
+  "places.create_db.name_ph":    "e.g. Travel, Food",
+  "places.create_db.submit":     "Create Database",
+
+  "places.list.title": "Places List",
+  "places.list.add":   "+ Add Place",
+  "places.list.empty": "No records yet. Click \"Add Place\" to create one.",
+
+  "places.field.name":     "Place Name",
+  "places.field.address":  "Address",
+  "places.field.link1":    "Link 1",
+  "places.field.link2":    "Link 2",
+  "places.field.achieved": "Achieved?",
+  "places.field.note":     "Note",
+
+  "places.add.title":  "Add Place",
+  "places.add.submit": "Save",
+
+  "places.index":          "Places Home",
+  "places.app_home":       "App Home",
+  "places.detail.back":    "← Back to Places List",
+  "places.detail.preview": "Web Preview",
+  "places.detail.save":    "Save",
+  "places.detail.discard": "Discard Changes",
+
+  "places.flash.fill_all":      "Please enter a place name.",
+  "places.flash.name_required": "Place name is required.",
+  "places.flash.db_created":    "Database \"{name}\" has been created.",
+  "places.flash.db_missing":    "Database not found.",
+  "places.flash.not_found":     "Record not found.",
 
   "placeholder.body": "This feature is currently under development. Stay tuned.",
   "placeholder.back": "← Back to Home",

@@ -1,0 +1,79 @@
+{% extends "places/base.html" %}
+{% block title %}{{ display_name }} — {{ t('places.brand') }}{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span>{{ t('places.brand') }}</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">{{ t('places.select_db.section') }}</span>
+      <span class="sidebar-db-name">{{ display_name }}</span>
+    </div>
+    <div class="sidebar-actions">
+      <a href="{{ url_for('places.index') }}" class="btn btn--ghost btn--full" style="text-decoration:none;text-align:center">{{ t('places.index') }}</a>
+      <a href="{{ url_for('home') }}" class="btn btn--ghost btn--full" style="margin-top:8px;text-decoration:none;text-align:center">{{ t('places.app_home') }}</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-header">
+      <h2 class="content-title">{{ t('places.list.title') }}</h2>
+      <a href="{{ url_for('places.add_place_form', db_file=db_file) }}" class="btn btn--primary">{{ t('places.list.add') }}</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>{{ t('places.field.name') }}</th>
+            <th>{{ t('places.field.address') }}</th>
+            <th>{{ t('places.field.link1') }}</th>
+            <th>{{ t('places.field.link2') }}</th>
+            <th>{{ t('places.field.achieved') }}</th>
+            <th>{{ t('places.field.note') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if places %}
+            {% for p in places %}
+            <tr style="cursor:pointer" onclick="location.href='{{ url_for('places.place_detail', db_file=db_file, place_id=p.id) }}'">
+              <td>{{ p.name }}</td>
+              <td class="cell-note">{{ p.address or '' }}</td>
+              <td class="cell-url">
+                {% if p.link1 %}
+                  <a href="{{ p.link1 }}" target="_blank" onclick="event.stopPropagation()">{{ p.link1 }}</a>
+                {% endif %}
+              </td>
+              <td class="cell-url">
+                {% if p.link2 %}
+                  <a href="{{ p.link2 }}" target="_blank" onclick="event.stopPropagation()">{{ p.link2 }}</a>
+                {% endif %}
+              </td>
+              <td>
+                {% if p.achieved %}
+                  <span style="color:var(--success)">✓</span>
+                {% else %}
+                  <span style="color:var(--text3)">—</span>
+                {% endif %}
+              </td>
+              <td class="cell-note">{{ p.note or '' }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-muted" style="padding:32px">{{ t('places.list.empty') }}</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}
