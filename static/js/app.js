@@ -7,6 +7,12 @@ function $(id) { return document.getElementById(id); }
 function show(el)   { el.hidden = false; }
 function hide(el)   { el.hidden = true; }
 
+function backdropClose(modal, closeFn) {
+  let fromBackdrop = false;
+  modal.addEventListener('mousedown', (e) => { fromBackdrop = e.target === modal; });
+  modal.addEventListener('click',     (e) => { if (e.target === modal && fromBackdrop) closeFn(); });
+}
+
 async function api(method, url, body) {
   const opts = {
     method,
@@ -60,9 +66,7 @@ if (loginModal) {
   });
 
   loginModalClose.addEventListener('click', () => hide(loginModal));
-  loginModal.addEventListener('click', (e) => {
-    if (e.target === loginModal) hide(loginModal);
-  });
+  backdropClose(loginModal, () => hide(loginModal));
 }
 
 // ── Delete database modal ─────────────────────────────────────────────────────
@@ -93,7 +97,7 @@ if (deleteDbModal) {
 
   $('deleteDbModalClose').addEventListener('click', closeDeleteDb);
   $('deleteDbCancelBtn').addEventListener('click', closeDeleteDb);
-  deleteDbModal.addEventListener('click', (e) => { if (e.target === deleteDbModal) closeDeleteDb(); });
+  backdropClose(deleteDbModal, closeDeleteDb);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !deleteDbModal.hidden) closeDeleteDb(); });
 
   $('deleteDbConfirmBtn').addEventListener('click', async () => {
@@ -246,7 +250,7 @@ else {
   $('newRecordBtn').addEventListener('click', openCreate);
   $('recordModalClose').addEventListener('click', () => hide(recordModal));
   $('recordModalCancel').addEventListener('click', () => hide(recordModal));
-  recordModal.addEventListener('click', (e) => { if (e.target === recordModal) hide(recordModal); });
+  backdropClose(recordModal, () => hide(recordModal));
 
   recordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -319,7 +323,7 @@ else {
   }
 
   $('revealModalClose').addEventListener('click', closeReveal);
-  revealModal.addEventListener('click', (e) => { if (e.target === revealModal) closeReveal(); });
+  backdropClose(revealModal, closeReveal);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !revealModal.hidden) closeReveal(); });
 
   $('revealSubmitBtn').addEventListener('click', async () => {
@@ -382,7 +386,7 @@ else {
 
   $('deleteModalClose').addEventListener('click', () => hide(deleteModal));
   $('deleteCancelBtn').addEventListener('click', () => hide(deleteModal));
-  deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) hide(deleteModal); });
+  backdropClose(deleteModal, () => hide(deleteModal));
 
   $('deleteConfirmBtn').addEventListener('click', async () => {
     const btn = $('deleteConfirmBtn');
