@@ -1,0 +1,147 @@
+{% extends "bucket_list/base.html" %}
+{% block title %}{{ t('bucket.page_title') }}{% endblock %}
+
+{% block content %}
+<div class="center-wrap">
+  <div class="brand">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <line x1="8" y1="6" x2="21" y2="6"/>
+      <line x1="8" y1="12" x2="21" y2="12"/>
+      <line x1="8" y1="18" x2="21" y2="18"/>
+      <polyline points="3 6 4 7 6 5"/>
+      <polyline points="3 12 4 13 6 11"/>
+      <polyline points="3 18 4 19 6 17"/>
+    </svg>
+    <h1 class="brand-title">{{ t('bucket.brand') }}</h1>
+  </div>
+
+  {% if databases %}
+  <section class="card">
+    <h2 class="section-title">{{ t('bucket.select_db.section') }}</h2>
+    <div class="db-list">
+      {% for db in databases %}
+      <div class="db-row">
+        <button class="db-item" data-db-file="{{ db.file }}" data-db-name="{{ db.display_name }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+          <span>{{ db.display_name }}</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button class="db-delete-btn" data-db-file="{{ db.file }}" data-db-name="{{ db.display_name }}" title="{{ t('bucket.select_db.delete_tooltip') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% else %}
+  <p class="hint-text">{{ t('bucket.select_db.no_db') }}</p>
+  {% endif %}
+
+  <section class="card">
+    <h2 class="section-title">{{ t('bucket.create_db.section') }}</h2>
+    <form method="POST" action="{{ url_for('bucket_list.create_db') }}" id="createDbForm">
+      <div class="form-group">
+        <label>{{ t('bucket.create_db.name_label') }}</label>
+        <input type="text" name="display_name" placeholder="{{ t('bucket.create_db.name_ph') }}" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>{{ t('bucket.field.username') }}</label>
+        <input type="text" name="username" placeholder="{{ t('bucket.field.username_new_ph') }}" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>{{ t('bucket.field.password1') }}</label>
+        <div class="input-wrap">
+          <input type="password" name="password1" placeholder="{{ t('bucket.field.password1_new_ph') }}" required autocomplete="new-password" id="create_p1">
+          <button type="button" class="toggle-pw" data-target="create_p1">&#9679;</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>{{ t('bucket.field.password2') }}</label>
+        <div class="input-wrap">
+          <input type="password" name="password2" placeholder="{{ t('bucket.field.password2_new_ph') }}" required autocomplete="new-password" id="create_p2">
+          <button type="button" class="toggle-pw" data-target="create_p2">&#9679;</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">{{ t('bucket.create_db.submit') }}</button>
+    </form>
+  </section>
+
+  <a href="{{ url_for('home') }}" class="back-link">{{ t('common.back_home') }}</a>
+</div>
+
+<div id="deleteDbModal" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('bucket.delete_db.title') }}</h3>
+      <button class="modal-close" id="deleteDbModalClose">&times;</button>
+    </div>
+    <p class="modal-desc">{{ t('bucket.delete_db.confirm_prefix') }}<strong id="deleteDbName"></strong>{{ t('bucket.delete_db.confirm_suffix') }}</p>
+    <input type="hidden" id="deleteDbFile">
+    <div class="form-group">
+      <label>{{ t('bucket.field.username') }}</label>
+      <input type="text" id="deleteDbUsername" placeholder="{{ t('bucket.field.username_ph') }}" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>{{ t('bucket.field.password1') }}</label>
+      <div class="input-wrap">
+        <input type="password" id="deleteDb_p1" placeholder="{{ t('bucket.field.password1_ph') }}" autocomplete="new-password">
+        <button type="button" class="toggle-pw" data-target="deleteDb_p1">&#9679;</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{ t('bucket.field.password2') }}</label>
+      <div class="input-wrap">
+        <input type="password" id="deleteDb_p2" placeholder="{{ t('bucket.field.password2_ph') }}" autocomplete="new-password">
+        <button type="button" class="toggle-pw" data-target="deleteDb_p2">&#9679;</button>
+      </div>
+    </div>
+    <div id="deleteDbError" class="error-msg" hidden></div>
+    <div class="form-actions" style="margin-top:20px">
+      <button class="btn btn--ghost" id="deleteDbCancelBtn">{{ t('common.cancel') }}</button>
+      <button class="btn btn--danger" id="deleteDbConfirmBtn">{{ t('bucket.delete_db.submit') }}</button>
+    </div>
+  </div>
+</div>
+
+<div id="loginModal" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="loginModalTitle">{{ t('bucket.login.title') }}</h3>
+      <button class="modal-close" id="loginModalClose">&times;</button>
+    </div>
+    <form method="POST" action="{{ url_for('bucket_list.login') }}" id="loginForm">
+      <input type="hidden" name="db_file" id="loginDbFile">
+      <div class="form-group">
+        <label>{{ t('bucket.field.username') }}</label>
+        <input type="text" name="username" placeholder="{{ t('bucket.field.username_ph') }}" required autocomplete="off" id="loginUsername">
+      </div>
+      <div class="form-group">
+        <label>{{ t('bucket.field.password1') }}</label>
+        <div class="input-wrap">
+          <input type="password" name="password1" placeholder="{{ t('bucket.field.password1_ph') }}" required autocomplete="current-password" id="login_p1">
+          <button type="button" class="toggle-pw" data-target="login_p1">&#9679;</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>{{ t('bucket.field.password2') }}</label>
+        <div class="input-wrap">
+          <input type="password" name="password2" placeholder="{{ t('bucket.field.password2_ph') }}" required autocomplete="current-password" id="login_p2">
+          <button type="button" class="toggle-pw" data-target="login_p2">&#9679;</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">{{ t('bucket.login.submit') }}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

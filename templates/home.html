@@ -94,7 +94,7 @@
       <span class="module-name">{{ t('module.places') }}</span>
     </a>
 
-    <a href="{{ url_for('bucket_list') }}" class="module-card module-card--placeholder">
+    <a href="{{ url_for('bucket_list.index') }}" class="module-card">
       <svg class="module-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <line x1="8" y1="6" x2="21" y2="6"/>
         <line x1="8" y1="12" x2="21" y2="12"/>
@@ -104,7 +104,6 @@
         <polyline points="3 18 4 19 6 17"/>
       </svg>
       <span class="module-name">{{ t('module.bucket_list') }}</span>
-      <span class="module-badge">{{ t('home.coming_soon') }}</span>
     </a>
 
     <a href="{{ url_for('stocks') }}" class="module-card module-card--placeholder">

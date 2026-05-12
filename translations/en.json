@@ -50,6 +50,81 @@
   "places.flash.db_missing":    "Database not found.",
   "places.flash.not_found":     "Record not found.",
 
+  "bucket.brand":      "Life Bucket List",
+  "bucket.page_title": "Select Database — Life Bucket List",
+
+  "bucket.select_db.section": "Select Database",
+  "bucket.select_db.no_db":   "No databases found. Please create your first database.",
+  "bucket.select_db.delete_tooltip": "Delete database",
+
+  "bucket.create_db.section":    "Create New Database",
+  "bucket.create_db.name_label": "Database Name",
+  "bucket.create_db.name_ph":    "e.g. Life Goals, Travel Wishes",
+  "bucket.create_db.submit":     "Create Database",
+
+  "bucket.login.title":  "Sign In",
+  "bucket.login.submit": "Sign In",
+
+  "bucket.delete_db.title":          "Delete Database",
+  "bucket.delete_db.confirm_prefix": "You are about to permanently delete \"",
+  "bucket.delete_db.confirm_suffix": "\". Enter your credentials to confirm.",
+  "bucket.delete_db.submit":         "Confirm Delete",
+
+  "bucket.field.username":        "Username",
+  "bucket.field.username_ph":     "Enter username",
+  "bucket.field.username_new_ph": "Username",
+  "bucket.field.password1":       "First-Layer Password",
+  "bucket.field.password1_ph":    "First-layer password",
+  "bucket.field.password1_new_ph":"Used for authentication",
+  "bucket.field.password2":       "Second-Layer Password",
+  "bucket.field.password2_ph":    "Second-layer password",
+  "bucket.field.password2_new_ph":"Used to encrypt data. Must differ from first-layer.",
+
+  "bucket.dashboard.page_title":  "Life Bucket List",
+  "bucket.dashboard.current_db":  "Current Database",
+  "bucket.dashboard.new_record":  "+ New Record",
+  "bucket.dashboard.count_total": "{n} records",
+
+  "bucket.table.goal":           "Wish or Goal",
+  "bucket.table.wish_date":      "Wish Date",
+  "bucket.table.completed_date": "Completion Date",
+  "bucket.table.description":    "Description",
+  "bucket.table.photo_url":      "Photo Link",
+  "bucket.table.actions":        "Actions",
+
+  "bucket.record.edit":     "Edit",
+  "bucket.record.delete":   "Delete",
+  "bucket.record.goal":     "Wish or Goal",
+  "bucket.record.goal_ph":  "What you want to complete",
+  "bucket.record.wish_date":      "Wish Date",
+  "bucket.record.completed_date": "Completion Date",
+  "bucket.record.description":    "Description",
+  "bucket.record.description_ph": "Capture the reason, expectation, or details…",
+  "bucket.record.photo_url":      "Photo Link",
+  "bucket.record.photo_url_ph":   "https://...",
+
+  "bucket.add_record.title":  "New Record",
+  "bucket.edit_record.title": "Edit Record",
+
+  "bucket.delete_record.title":          "Confirm Delete",
+  "bucket.delete_record.confirm_prefix": "Are you sure you want to delete \"",
+  "bucket.delete_record.confirm_suffix": "\"? This action cannot be undone.",
+  "bucket.delete_record.submit":         "Delete",
+
+  "bucket.flash.fill_all":   "Please fill in all fields.",
+  "bucket.flash.pwd_same":   "The two passwords must not be identical.",
+  "bucket.flash.db_created": "Database \"{name}\" has been created.",
+  "bucket.flash.db_missing": "Database not found.",
+  "bucket.flash.auth_error": "Invalid username or password.",
+
+  "bucket.api.not_logged_in":    "Not authenticated.",
+  "bucket.api.invalid_data":     "Invalid request data.",
+  "bucket.api.goal_required":    "Wish or goal is required.",
+  "bucket.api.record_not_found": "Record not found.",
+  "bucket.api.db_not_found":     "Database not found.",
+  "bucket.api.auth_error":       "Invalid username or password.",
+  "bucket.js.no_records":        "No records found. Click \"+ New Record\" to create one.",
+
   "placeholder.body": "This feature is currently under development. Stay tuned.",
   "placeholder.back": "← Back to Home",
 

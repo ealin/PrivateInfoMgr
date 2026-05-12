@@ -1,0 +1,128 @@
+{% extends "bucket_list/base.html" %}
+{% block title %}{{ display_name }} — {{ t('bucket.brand') }}{% endblock %}
+
+{% block content %}
+<style>
+  .bucket-record-grid > .form-group,
+  .bucket-record-grid > .form-group + .form-group {
+    margin-top: 0 !important;
+  }
+  .bucket-record-grid {
+    align-items: start;
+  }
+  .bucket-record-grid > .form-group > label {
+    line-height: 1.2;
+    min-height: 1.2em;
+  }
+</style>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <line x1="8" y1="6" x2="21" y2="6"/>
+        <line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <polyline points="3 6 4 7 6 5"/>
+        <polyline points="3 12 4 13 6 11"/>
+        <polyline points="3 18 4 19 6 17"/>
+      </svg>
+      <span>{{ t('bucket.brand') }}</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">{{ t('bucket.dashboard.current_db') }}</span>
+      <span class="sidebar-db-name">{{ display_name }}</span>
+      <span class="sidebar-db-user">{{ username }}</span>
+    </div>
+    <div class="sidebar-actions">
+      <form method="POST" action="{{ url_for('bucket_list.logout') }}">
+        <button type="submit" class="btn btn--ghost btn--full">{{ t('common.logout') }}</button>
+      </form>
+      <a href="{{ url_for('home') }}" class="btn btn--ghost btn--full" style="margin-top:8px;text-decoration:none;text-align:center">{{ t('common.home') }}</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-header">
+      <h2 class="content-title">{{ t('bucket.dashboard.page_title') }}</h2>
+      <button class="btn btn--primary" id="newRecordBtn">{{ t('bucket.dashboard.new_record') }}</button>
+    </div>
+
+    <div>
+      <span id="recordCount" style="font-size:13px;color:var(--text2);white-space:nowrap"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="records-table" id="recordsTable">
+        <thead>
+          <tr>
+            <th>{{ t('bucket.table.goal') }}</th>
+            <th>{{ t('bucket.table.wish_date') }}</th>
+            <th>{{ t('bucket.table.completed_date') }}</th>
+            <th>{{ t('bucket.table.description') }}</th>
+            <th>{{ t('bucket.table.photo_url') }}</th>
+            <th class="col-actions">{{ t('bucket.table.actions') }}</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTbody">
+          <tr id="loadingRow">
+            <td colspan="6" class="text-center text-muted">{{ t('js.loading') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="recordModal" class="modal" hidden>
+  <div class="modal-box modal-box--wide">
+    <div class="modal-header">
+      <h3 id="recordModalTitle">{{ t('bucket.add_record.title') }}</h3>
+      <button class="modal-close" id="recordModalClose">&times;</button>
+    </div>
+    <form id="recordForm">
+      <input type="hidden" id="recordId">
+      <div class="form-grid bucket-record-grid">
+        <div class="form-group">
+          <label>{{ t('bucket.record.goal') }} <span class="required">*</span></label>
+          <input type="text" id="f_goal" placeholder="{{ t('bucket.record.goal_ph') }}" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>{{ t('bucket.record.wish_date') }}</label>
+          <input type="date" id="f_wish_date">
+        </div>
+        <div class="form-group">
+          <label>{{ t('bucket.record.completed_date') }}</label>
+          <input type="date" id="f_completed_date">
+        </div>
+        <div class="form-group">
+          <label>{{ t('bucket.record.photo_url') }}</label>
+          <input type="url" id="f_photo_url" placeholder="{{ t('bucket.record.photo_url_ph') }}" autocomplete="off">
+        </div>
+        <div class="form-group form-group--full">
+          <label>{{ t('bucket.record.description') }}</label>
+          <textarea id="f_description" rows="4" placeholder="{{ t('bucket.record.description_ph') }}"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" id="recordModalCancel">{{ t('common.cancel') }}</button>
+        <button type="submit" class="btn btn--primary" id="recordSubmitBtn">{{ t('common.save') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="deleteModal" class="modal" hidden>
+  <div class="modal-box modal-box--sm">
+    <div class="modal-header">
+      <h3>{{ t('bucket.delete_record.title') }}</h3>
+      <button class="modal-close" id="deleteModalClose">&times;</button>
+    </div>
+    <p class="modal-desc">{{ t('bucket.delete_record.confirm_prefix') }}<strong id="deleteRecordName"></strong>{{ t('bucket.delete_record.confirm_suffix') }}</p>
+    <div class="form-actions">
+      <button class="btn btn--ghost" id="deleteCancelBtn">{{ t('common.cancel') }}</button>
+      <button class="btn btn--danger" id="deleteConfirmBtn">{{ t('bucket.delete_record.submit') }}</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

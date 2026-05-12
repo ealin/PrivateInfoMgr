@@ -50,6 +50,81 @@
   "places.flash.db_missing":    "資料庫不存在",
   "places.flash.not_found":     "記錄不存在",
 
+  "bucket.brand":      "人生待完成項目清單",
+  "bucket.page_title": "選擇資料庫 — 人生待完成項目清單",
+
+  "bucket.select_db.section": "選擇資料庫",
+  "bucket.select_db.no_db":   "尚無資料庫，請建立第一個資料庫。",
+  "bucket.select_db.delete_tooltip": "刪除資料庫",
+
+  "bucket.create_db.section":    "建立新資料庫",
+  "bucket.create_db.name_label": "資料庫名稱",
+  "bucket.create_db.name_ph":    "例：人生目標、旅行願望",
+  "bucket.create_db.submit":     "建立資料庫",
+
+  "bucket.login.title":  "登入",
+  "bucket.login.submit": "登入",
+
+  "bucket.delete_db.title":          "刪除資料庫",
+  "bucket.delete_db.confirm_prefix": "刪除「",
+  "bucket.delete_db.confirm_suffix": "」後無法復原，請輸入帳號與兩層密碼確認。",
+  "bucket.delete_db.submit":         "確認刪除",
+
+  "bucket.field.username":        "帳號",
+  "bucket.field.username_ph":     "請輸入帳號",
+  "bucket.field.username_new_ph": "登入帳號",
+  "bucket.field.password1":       "第一層密碼",
+  "bucket.field.password1_ph":    "第一層密碼",
+  "bucket.field.password1_new_ph":"用於登入驗證",
+  "bucket.field.password2":       "第二層密碼",
+  "bucket.field.password2_ph":    "第二層密碼",
+  "bucket.field.password2_new_ph":"用於加密資料，不可與第一層相同",
+
+  "bucket.dashboard.page_title":  "人生待完成項目",
+  "bucket.dashboard.current_db":  "目前資料庫",
+  "bucket.dashboard.new_record":  "+ 新增記錄",
+  "bucket.dashboard.count_total": "共 {n} 筆",
+
+  "bucket.table.goal":           "願望或目標",
+  "bucket.table.wish_date":      "發願日期",
+  "bucket.table.completed_date": "達成日期",
+  "bucket.table.description":    "描述",
+  "bucket.table.photo_url":      "照片連結",
+  "bucket.table.actions":        "操作",
+
+  "bucket.record.edit":     "編輯",
+  "bucket.record.delete":   "刪除",
+  "bucket.record.goal":     "願望或目標",
+  "bucket.record.goal_ph":  "想完成的事",
+  "bucket.record.wish_date":      "發願日期",
+  "bucket.record.completed_date": "達成日期",
+  "bucket.record.description":    "描述",
+  "bucket.record.description_ph": "記下原因、期待或細節…",
+  "bucket.record.photo_url":      "照片連結",
+  "bucket.record.photo_url_ph":   "https://...",
+
+  "bucket.add_record.title":  "新增記錄",
+  "bucket.edit_record.title": "編輯記錄",
+
+  "bucket.delete_record.title":          "確認刪除",
+  "bucket.delete_record.confirm_prefix": "確定要刪除「",
+  "bucket.delete_record.confirm_suffix": "」嗎？此操作無法復原。",
+  "bucket.delete_record.submit":         "刪除",
+
+  "bucket.flash.fill_all":   "請填寫所有欄位",
+  "bucket.flash.pwd_same":   "兩層密碼不能相同",
+  "bucket.flash.db_created": "資料庫「{name}」已建立",
+  "bucket.flash.db_missing": "資料庫不存在",
+  "bucket.flash.auth_error": "帳號或密碼錯誤",
+
+  "bucket.api.not_logged_in":    "未登入",
+  "bucket.api.invalid_data":     "無效資料",
+  "bucket.api.goal_required":    "願望或目標為必填",
+  "bucket.api.record_not_found": "記錄不存在",
+  "bucket.api.db_not_found":     "資料庫不存在",
+  "bucket.api.auth_error":       "帳號或密碼錯誤",
+  "bucket.js.no_records":        "尚無記錄，請點擊「新增記錄」。",
+
   "placeholder.body": "此功能尚在開發中，敬請期待。",
   "placeholder.back": "← 返回主畫面",
 

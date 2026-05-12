@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ t('bucket.brand') }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="lang-switcher">
+    {% for lang in supported_langs %}
+    <form method="POST" action="{{ url_for('set_lang') }}" style="display:inline">
+      <input type="hidden" name="lang" value="{{ lang.code }}">
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="lang-btn{% if lang.code == current_lang %} lang-btn--active{% endif %}">{{ lang.label }}</button>
+    </form>
+    {% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+    {% endfor %}
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  {% set T_data = {
+    'login_suffix':       t('bucket.login.title'),
+    'fill_all':           t('bucket.flash.fill_all'),
+    'loading':            t('js.loading'),
+    'load_failed':        t('js.load_failed'),
+    'no_records':         t('bucket.js.no_records'),
+    'save_failed':        t('js.save_failed'),
+    'load_record_failed': t('js.load_record_failed'),
+    'delete_failed':      t('js.delete_failed'),
+    'add_record_title':   t('bucket.add_record.title'),
+    'edit_record_title':  t('bucket.edit_record.title'),
+    'goal_required':      t('bucket.api.goal_required'),
+    'edit':               t('bucket.record.edit'),
+    'delete':             t('bucket.record.delete'),
+    'count_total':        t('bucket.dashboard.count_total')
+  } %}
+  <script>window.T = {{ T_data | tojson }};</script>
+  <script src="{{ url_for('static', filename='js/bucket_list.js') }}"></script>
+</body>
+</html>
