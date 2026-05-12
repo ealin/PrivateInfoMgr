@@ -153,7 +153,22 @@ else {
     }
   }
 
+  const recordCountEl = $('recordCount');
+
+  function updateCount(displayed, total) {
+    if (!recordCountEl) return;
+    const num = (n) => `<span style="color:var(--accent);font-weight:700;font-size:15px">${n}</span>`;
+    if (displayed === total) {
+      recordCountEl.innerHTML = T.count_total.replace('{n}', num(total));
+    } else {
+      recordCountEl.innerHTML = T.count_filtered
+        .replace('{found}', num(displayed))
+        .replace('{total}', num(total));
+    }
+  }
+
   function renderRecords(records) {
+    updateCount(records.length, allRecords.length);
     if (records.length === 0) {
       recordsTbody.innerHTML =
         `<tr><td colspan="6" class="text-center text-muted">${T.no_records}</td></tr>`;

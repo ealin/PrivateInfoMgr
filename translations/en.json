@@ -10,6 +10,7 @@
   "module.places":      "Places I Want to Go",
   "module.bucket_list": "Life Bucket List",
   "module.stocks":      "Fractional Shares",
+  "module.ideas":       "IDEA Collection",
 
   "places.brand":      "Places I Want to Go",
   "places.page_title": "Select Database — Places",
@@ -88,10 +89,12 @@
   "pwd.field.password2_ph":    "Second-layer password",
   "pwd.field.password2_new_ph":"Used to reveal passwords. Must differ from first-layer.",
 
-  "pwd.dashboard.page_title": "Password Records",
-  "pwd.dashboard.current_db": "Current Database",
-  "pwd.dashboard.new_record": "+ New Record",
-  "pwd.dashboard.search_ph":  "Search by name…",
+  "pwd.dashboard.page_title":     "Password Records",
+  "pwd.dashboard.current_db":     "Current Database",
+  "pwd.dashboard.new_record":     "+ New Record",
+  "pwd.dashboard.search_ph":      "Search by name…",
+  "pwd.dashboard.count_total":    "{n} records",
+  "pwd.dashboard.count_filtered": "{found} of {total} records",
 
   "pwd.table.name":    "Name",
   "pwd.table.url":     "URL",

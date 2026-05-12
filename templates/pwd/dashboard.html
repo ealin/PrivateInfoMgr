@@ -35,7 +35,7 @@
     </div>
 
     <!-- Search bar -->
-    <div class="search-bar">
+    <div class="search-bar" style="display:flex;align-items:center;gap:16px">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -43,6 +43,7 @@
         <input type="text" id="searchInput" placeholder="{{ t('pwd.dashboard.search_ph') }}" autocomplete="off" readonly>
         <button id="searchClear" class="search-clear" hidden title="&times;">&times;</button>
       </div>
+      <span id="recordCount" style="font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0"></span>
     </div>
 
     <!-- Records table -->

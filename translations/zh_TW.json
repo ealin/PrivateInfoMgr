@@ -10,6 +10,7 @@
   "module.places":      "我想去的",
   "module.bucket_list": "人生待完成項目清單",
   "module.stocks":      "零股管理",
+  "module.ideas":       "IDEA 收集",
 
   "places.brand":      "我想去的",
   "places.page_title": "選擇資料庫 — 我想去的",
@@ -88,10 +89,12 @@
   "pwd.field.password2_ph":   "第二層密碼",
   "pwd.field.password2_new_ph":"用於查看密碼，不可與第一層相同",
 
-  "pwd.dashboard.page_title":    "密碼記錄",
-  "pwd.dashboard.current_db":    "目前資料庫",
-  "pwd.dashboard.new_record":    "+ 新增記錄",
-  "pwd.dashboard.search_ph":     "搜尋名稱…",
+  "pwd.dashboard.page_title":        "密碼記錄",
+  "pwd.dashboard.current_db":        "目前資料庫",
+  "pwd.dashboard.new_record":        "+ 新增記錄",
+  "pwd.dashboard.search_ph":         "搜尋名稱…",
+  "pwd.dashboard.count_total":       "共 {n} 筆",
+  "pwd.dashboard.count_filtered":    "找到 {found} / 共 {total} 筆",
 
   "pwd.table.name":    "名稱",
   "pwd.table.url":     "網址",

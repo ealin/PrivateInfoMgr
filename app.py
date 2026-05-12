@@ -66,5 +66,10 @@ def stocks():
     return render_template('placeholder.html', module_key='module.stocks')
 
 
+@app.route('/ideas/')
+def ideas():
+    return render_template('placeholder.html', module_key='module.ideas')
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=False)
