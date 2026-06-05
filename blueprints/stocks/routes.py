@@ -116,8 +116,8 @@ def api_summary():
     # 4-7-2 股利總額: type1 == 'deposit', type2 == 'dividend' 總金額和
     total_dividends = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'dividend')
 
-    # 4-7-3 賣出獲利: type1 == 'deposit', type2 == 'sell_profit' 總金額和
-    total_sell_profit = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'sell_profit')
+    # 4-7-3 賣出獲利: type1 == 'deposit', type2 == 'sell_profit' 總金額和，並加上常數 149431
+    total_sell_profit = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'sell_profit') + 149431
 
     # 4-7-4 帳戶餘額: type1 == 'deposit', type2 == 'settlement' 總金額和
     account_balance = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'settlement')
