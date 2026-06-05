@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ t('stocks.brand') }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .color-buy {
+      color: #e05555 !important;
+    }
+    .color-sell {
+      color: #4caf7d !important;
+    }
+    .color-dividend {
+      color: #5b8af5 !important;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .summary-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+    .summary-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .summary-details {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text2);
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+    .dashboard-tables {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .section-header {
+      margin-bottom: 12px;
+    }
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .recent-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 4px 8px;
+    }
+    .btn-delete-item {
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0 4px;
+      transition: color 0.15s;
+    }
+    .btn-delete-item:hover {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lang-switcher">
+    {% for lang in supported_langs %}
+    <form method="POST" action="{{ url_for('set_lang') }}" style="display:inline">
+      <input type="hidden" name="lang" value="{{ lang.code }}">
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="lang-btn{% if lang.code == current_lang %} lang-btn--active{% endif %}">{{ lang.label }}</button>
+    </form>
+    {% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+    {% endfor %}
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  {% set T_data = {
+    'loading':            t('js.loading'),
+    'load_failed':        t('js.load_failed'),
+    'save_failed':        t('js.save_failed'),
+    'delete_failed':      t('js.delete_failed'),
+    'type_buy':           t('stocks.type.buy'),
+    'type_sell':          t('stocks.type.sell'),
+    'type_stock_dividend':t('stocks.type.stock_dividend'),
+    'type_deposit':       t('stocks.type.deposit'),
+    'type_withdraw':      t('stocks.type.withdraw'),
+    'type_cash':          t('stocks.type.cash'),
+    'type_dividend':      t('stocks.type.dividend'),
+    'type_sell_profit':   t('stocks.type.sell_profit'),
+    'type_settlement':    t('stocks.type.settlement'),
+    'no_recent_funds':    t('stocks.js.no_recent_funds'),
+    'no_trades':          t('stocks.js.no_trades'),
+    'no_cost':            t('stocks.js.no_cost'),
+    'field_actions':      t('stocks.field.actions')
+  } %}
+  <script>window.T = {{ T_data | tojson }};</script>
+  <script src="{{ url_for('static', filename='js/stocks.js') }}"></script>
+</body>
+</html>

@@ -18,6 +18,7 @@ import config
 from blueprints.bucket_list.routes import bucket_list_bp
 from blueprints.places.routes import places_bp
 from blueprints.pwd.routes import pwd_bp
+from blueprints.stocks.routes import stocks_bp
 from i18n import DEFAULT_LANG, SUPPORTED_LANGS, get_locale, lang_options
 from i18n import load_translations
 from i18n import t as _t
@@ -33,6 +34,7 @@ load_translations()
 app.register_blueprint(pwd_bp)
 app.register_blueprint(places_bp)
 app.register_blueprint(bucket_list_bp)
+app.register_blueprint(stocks_bp)
 
 
 @app.context_processor
@@ -58,9 +60,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/stocks/')
-def stocks():
-    return render_template('placeholder.html', module_key='module.stocks')
+
 
 
 @app.route('/ideas/')

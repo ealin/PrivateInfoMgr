@@ -1,0 +1,289 @@
+{% extends "stocks/base.html" %}
+{% block title %}{{ t('stocks.page_title') }}{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+        <polyline points="16 7 22 7 22 13"/>
+      </svg>
+      <span>{{ t('stocks.brand') }}</span>
+    </div>
+    <div class="sidebar-db">
+      <span class="sidebar-db-label">Status</span>
+      <span class="sidebar-db-name">Active</span>
+      <span class="sidebar-db-user">No Encryption</span>
+    </div>
+    <div class="sidebar-actions">
+      <a href="{{ url_for('home') }}" class="btn btn--ghost btn--full" style="text-decoration:none;text-align:center">{{ t('common.back_home') }}</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="content-header">
+      <h2 class="content-title">{{ t('stocks.dashboard.title') }}</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn--primary" id="btnDepositWithdraw">{{ t('stocks.action.deposit_withdraw') }}</button>
+        <button class="btn btn--primary" id="btnDividend">{{ t('stocks.action.dividend') }}</button>
+        <button class="btn btn--primary" id="btnAddTrade">{{ t('stocks.action.add_trade') }}</button>
+        <button class="btn btn--primary" id="btnSellTrade">{{ t('stocks.action.sell_trade') }}</button>
+        <button class="btn btn--primary" id="btnSettlement">{{ t('stocks.action.set_settlement') }}</button>
+      </div>
+    </div>
+
+    <!-- 4-7 資金與盈虧總覽 -->
+    <div class="summary-grid">
+      <!-- 4-7-1 投入總金額 -->
+      <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+          <div class="summary-label">{{ t('stocks.summary.invested') }}</div>
+          <div class="summary-val" id="valInvested">$0</div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;">
+          <div class="summary-label" style="margin-bottom: 8px;">{{ t('stocks.summary.total_stock_cost') }}</div>
+          <div class="summary-val" id="valTotalStockCost">$0</div>
+        </div>
+      </div>
+      <!-- 4-7-2 股利總額 -->
+      <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+          <div class="summary-label">{{ t('stocks.summary.dividends') }}</div>
+          <div class="summary-val" id="valDividends">$0</div>
+        </div>
+        <div style="flex: 1;"></div>
+      </div>
+      <!-- 4-7-3 賣出獲利 -->
+      <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+          <div class="summary-label">{{ t('stocks.summary.sell_profit') }}</div>
+          <div class="summary-val" id="valSellProfit">$0</div>
+        </div>
+        <div style="flex: 1;"></div>
+      </div>
+      <!-- 4-7-4 帳戶餘額 -->
+      <div class="summary-card">
+        <div class="summary-label">{{ t('stocks.summary.balance') }}</div>
+        <div class="summary-val" id="valBalance">$0</div>
+        <div class="summary-details">
+          <div style="font-weight:600;margin-bottom:4px">{{ t('stocks.summary.recent_title') }}</div>
+          <div id="recentFundsList" class="recent-list">
+            <span class="text-muted">{{ t('stocks.js.no_recent_funds') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-6 顯示零股與持股成本表格 -->
+    <div class="dashboard-tables">
+      <!-- 4-6 下半部：持股成本表 -->
+      <div>
+        <div class="section-header">
+          <h3 class="content-title" style="font-size:16px">{{ t('stocks.table.cost_title') }}</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th>{{ t('stocks.field.stock_name') }}</th>
+                <th>{{ t('stocks.field.shares') }}</th>
+                <th>{{ t('stocks.field.cost') }}</th>
+                <th>{{ t('stocks.field.cost_per_share') }}</th>
+              </tr>
+            </thead>
+            <tbody id="costTbody">
+              <tr>
+                <td colspan="4" class="text-center text-muted" style="padding:24px">{{ t('stocks.js.no_cost') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4-6 上半部：零股買賣資訊表 (以股票名稱為橫軸的多欄位版面) -->
+      <div>
+        <div class="section-header">
+          <h3 class="content-title" style="font-size:16px">{{ t('stocks.table.trades_title') }}</h3>
+        </div>
+        <div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;align-items:flex-start" id="tradesContainer">
+          <!-- Dynamically populated stock columns -->
+          <div class="text-center text-muted" style="padding:24px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg)">
+            {{ t('stocks.js.no_trades') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- 4-1 Modal: 存入/取出資金 -->
+<div id="modalDepositWithdraw" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('stocks.action.deposit_withdraw') }}</h3>
+      <button class="modal-close" onclick="closeModal('modalDepositWithdraw')">&times;</button>
+    </div>
+    <form id="formDepositWithdraw" onsubmit="handleFormSubmit(event, '/stocks/api/funds', 'modalDepositWithdraw')">
+      <div class="form-group">
+        <label>{{ t('stocks.field.type') }} <span class="required">*</span></label>
+        <div style="display:flex;gap:16px;margin:8px 0">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none">
+            <input type="radio" name="type1" value="deposit" checked style="width:auto"> {{ t('stocks.modal.deposit') }}
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none">
+            <input type="radio" name="type1" value="withdraw" style="width:auto"> {{ t('stocks.modal.withdraw') }}
+          </label>
+        </div>
+        <input type="hidden" name="type2" value="cash">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
+        <input type="number" step="any" min="0.01" name="total_amount" required placeholder="0.00">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" onclick="closeModal('modalDepositWithdraw')">{{ t('stocks.modal.cancel') }}</button>
+        <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4-2 Modal: 輸入股利收入 -->
+<div id="modalDividend" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('stocks.action.dividend') }}</h3>
+      <button class="modal-close" onclick="closeModal('modalDividend')">&times;</button>
+    </div>
+    <form id="formDividend" onsubmit="handleFormSubmit(event, '/stocks/api/funds', 'modalDividend')">
+      <input type="hidden" name="type1" value="deposit">
+      <input type="hidden" name="type2" value="dividend">
+      <div class="form-group">
+        <label>{{ t('stocks.field.stock_name') }} <span class="required">*</span></label>
+        <input type="text" name="stock_name" id="divStockName" required placeholder="e.g. 台積電" list="existingStockNames">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.date') }} <span class="required">*</span></label>
+        <input type="date" name="date" required id="dividend_date">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
+        <input type="number" step="any" min="0.01" name="total_amount" required placeholder="0.00">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" onclick="closeModal('modalDividend')">{{ t('stocks.modal.cancel') }}</button>
+        <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4-3 Modal: 新增零股 -->
+<div id="modalAddTrade" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('stocks.action.add_trade') }}</h3>
+      <button class="modal-close" onclick="closeModal('modalAddTrade')">&times;</button>
+    </div>
+    <form id="formAddTrade" onsubmit="handleFormSubmit(event, '/stocks/api/trades', 'modalAddTrade')">
+      <div class="form-group">
+        <label>{{ t('stocks.field.type') }} <span class="required">*</span></label>
+        <div style="display:flex;gap:16px;margin:8px 0">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none">
+            <input type="radio" name="type" value="buy" checked onchange="toggleAddTradeAmount(false)" style="width:auto"> {{ t('stocks.type.buy') }}
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none">
+            <input type="radio" name="type" value="stock_dividend" onchange="toggleAddTradeAmount(true)" style="width:auto"> {{ t('stocks.type.stock_dividend') }}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.stock_name') }} <span class="required">*</span></label>
+        <input type="text" name="stock_name" id="addStockName" required placeholder="e.g. 台積電" list="existingStockNames">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.stock_code') }} <span class="required">*</span></label>
+        <input type="text" name="stock_code" required placeholder="e.g. 2330">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.shares') }} <span class="required">*</span></label>
+        <input type="number" min="1" name="shares" required placeholder="e.g. 100">
+      </div>
+      <div class="form-group" id="groupAddTradeAmount">
+        <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
+        <input type="number" step="any" min="0.01" name="total_amount" id="addTradeAmount" required placeholder="0.00">
+      </div>
+      <div class="form-group" id="infoAddTradeDividend" style="display:none">
+        <span class="text-muted" style="font-size:12px">{{ t('stocks.modal.stock_dividend_info') }}</span>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" onclick="closeModal('modalAddTrade')">{{ t('stocks.modal.cancel') }}</button>
+        <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4-4 Modal: 賣出零股 -->
+<div id="modalSellTrade" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('stocks.action.sell_trade') }}</h3>
+      <button class="modal-close" onclick="closeModal('modalSellTrade')">&times;</button>
+    </div>
+    <form id="formSellTrade" onsubmit="handleFormSubmit(event, '/stocks/api/trades', 'modalSellTrade')">
+      <input type="hidden" name="type" value="sell">
+      <div class="form-group">
+        <label>{{ t('stocks.field.stock_name') }} <span class="required">*</span></label>
+        <input type="text" name="stock_name" id="sellStockName" required placeholder="e.g. 台積電" list="existingStockNames">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.stock_code') }} <span class="required">*</span></label>
+        <input type="text" name="stock_code" required placeholder="e.g. 2330">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.shares') }} <span class="required">*</span></label>
+        <input type="number" min="1" name="shares" required placeholder="e.g. 50">
+      </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
+        <input type="number" step="any" min="0.01" name="total_amount" required placeholder="0.00">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" onclick="closeModal('modalSellTrade')">{{ t('stocks.modal.cancel') }}</button>
+        <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4-5 Modal: 設定交割款 -->
+<div id="modalSettlement" class="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>{{ t('stocks.action.set_settlement') }}</h3>
+      <button class="modal-close" onclick="closeModal('modalSettlement')">&times;</button>
+    </div>
+    <form id="formSettlement" onsubmit="handleFormSubmit(event, '/stocks/api/funds', 'modalSettlement')">
+      <input type="hidden" name="type1" value="deposit">
+      <input type="hidden" name="type2" value="settlement">
+      <div class="form-group">
+        <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
+        <input type="number" step="any" name="total_amount" required placeholder="0.00 (可輸入正數或負數)">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" onclick="closeModal('modalSettlement')">{{ t('stocks.modal.cancel') }}</button>
+        <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<datalist id="existingStockNames"></datalist>
+
+{% endblock %}
