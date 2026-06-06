@@ -244,6 +244,7 @@ function renderTradesAndCost(trades) {
 
     const columnCard = document.createElement('div');
     columnCard.className = 'summary-card';
+    columnCard.id = 'trade-col-' + group.code.trim();
     columnCard.style.minWidth = '300px';
     columnCard.style.flex = '0 0 auto';
 
@@ -334,7 +335,11 @@ function renderTradesAndCost(trades) {
       totalStockCost += row.cost;
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><strong>${row.name} (${row.code})</strong></td>
+        <td>
+          <a href="javascript:void(0)" onclick="scrollToStockColumn('${row.code.trim()}')" style="color: var(--accent); text-decoration: none; font-weight: 700; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+            ${row.name} (${row.code})
+          </a>
+        </td>
         <td>${row.shares}</td>
         <td>${formatCurrency(row.cost, true)}</td>
         <td>${formatCurrency(row.avgCost)}</td>
@@ -393,4 +398,22 @@ function formatCurrency(val, forceInt = false) {
     return '$' + num.toLocaleString();
   }
   return '$' + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Helper: Scroll horizontally to a specific stock column card and flash highlight it
+function scrollToStockColumn(code) {
+  const element = document.getElementById('trade-col-' + code);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    
+    // Smooth transition flash highlight
+    element.style.transition = 'border-color 0.25s, background-color 0.25s';
+    element.style.borderColor = 'var(--accent)';
+    element.style.backgroundColor = 'var(--accent-dim)';
+    
+    setTimeout(() => {
+      element.style.borderColor = '';
+      element.style.backgroundColor = '';
+    }, 1200);
+  }
 }
