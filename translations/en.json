@@ -276,5 +276,13 @@
   "stocks.api.not_logged_in": "Not logged in.",
   "stocks.js.no_recent_funds": "No recent fund transactions found.",
   "stocks.js.no_trades": "No trade records found.",
-  "stocks.js.no_cost": "No holdings found."
+  "stocks.js.no_cost": "No holdings found.",
+
+  "system.backup_restore": "System Database Backup & Restore",
+  "system.backup_restore_desc": "Backup all database and index files into a ZIP, or upload a ZIP to restore (system will auto-backup before overwrite).",
+  "system.backup": "Backup Databases",
+  "system.restore": "Restore Databases",
+  "system.restore.confirm": "Are you sure you want to restore this backup? This will overwrite all existing databases!",
+  "system.restore.invalid_zip": "Restore failed: The ZIP file does not contain valid database or index files.",
+  "system.restore.success": "Database restored successfully! The original database has been backed up to:\n{file}"
 }

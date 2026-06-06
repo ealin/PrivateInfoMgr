@@ -131,6 +131,72 @@
     </a>
 
   </div>
+
+  <!-- 備份與還原系統工具面板 -->
+  <div style="margin-top: 24px; width: min(720px, 92vw); display: flex; flex-direction: column; gap: 16px;">
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px; text-align: left;">
+        <h3 style="font-size: 15px; font-weight: 600; color: var(--text);">{{ t('system.backup_restore') }}</h3>
+        <p style="font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.5;">{{ t('system.backup_restore_desc') }}</p>
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn--primary" onclick="triggerBackup()">{{ t('system.backup') }}</button>
+        <button class="btn btn--ghost" onclick="triggerRestoreClick()">{{ t('system.restore') }}</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="restoreFileInput" accept=".zip" style="display: none;" onchange="handleRestoreUpload(this)">
+
+  <script>
+    function triggerBackup() {
+      window.location.href = '/api/system/backup';
+    }
+
+    function triggerRestoreClick() {
+      document.getElementById('restoreFileInput').click();
+    }
+
+    async function handleRestoreUpload(input) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      
+      const confirmMsg = "{{ t('system.restore.confirm') }}";
+      if (!confirm(confirmMsg)) {
+        input.value = '';
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('backup_file', file);
+      
+      const restoreBtn = document.querySelector('button[onclick="triggerRestoreClick()"]');
+      const originalText = restoreBtn.innerText;
+      restoreBtn.disabled = true;
+      restoreBtn.innerText = "{{ t('js.loading') }}";
+      
+      try {
+        const res = await fetch('/api/system/restore', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await res.json();
+        if (res.ok && result.success) {
+          alert(result.message);
+          window.location.reload();
+        } else {
+          alert(result.error || '還原失敗。');
+        }
+      } catch (error) {
+        alert('還原發生錯誤：' + error.message);
+      } finally {
+        restoreBtn.disabled = false;
+        restoreBtn.innerText = originalText;
+        input.value = '';
+      }
+    }
+  </script>
 </div>
 </body>
 </html>

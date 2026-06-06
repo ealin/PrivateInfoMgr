@@ -276,5 +276,13 @@
   "stocks.api.not_logged_in": "未登入",
   "stocks.js.no_recent_funds": "尚無資金變動紀錄。",
   "stocks.js.no_trades": "尚無零股交易紀錄。",
-  "stocks.js.no_cost": "目前無持股資訊。"
+  "stocks.js.no_cost": "目前無持股資訊。",
+
+  "system.backup_restore": "系統資料庫備份與還原",
+  "system.backup_restore_desc": "備份所有功能的資料庫與設定檔為 ZIP，或選擇 ZIP 檔進行還原（還原前系統會自動執行備份）。",
+  "system.backup": "備份資料庫",
+  "system.restore": "還原資料庫",
+  "system.restore.confirm": "確定要還原此備份嗎？這將會覆蓋您現有的所有資料庫檔案！",
+  "system.restore.invalid_zip": "還原失敗：此 ZIP 壓縮檔不含系統資料庫或關鍵索引檔。",
+  "system.restore.success": "資料庫還原成功！覆蓋前的舊資料庫已自動存封備份至：\n{file}"
 }
