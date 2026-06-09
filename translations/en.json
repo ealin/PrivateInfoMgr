@@ -245,7 +245,7 @@
   "stocks.summary.dividends": "Total Dividends",
   "stocks.summary.sell_profit": "Sell Profits",
   "stocks.summary.balance": "Account Balance",
-  "stocks.summary.recent_title": "Recent 5 Fund Transactions",
+  "stocks.summary.recent_title": "Fund Transactions",
   "stocks.table.trades_title": "Fractional Share Trades Table",
   "stocks.table.cost_title": "Holdings Cost Table",
   "stocks.field.date": "Date",

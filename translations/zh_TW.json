@@ -245,7 +245,7 @@
   "stocks.summary.dividends": "股利總額",
   "stocks.summary.sell_profit": "賣出獲利",
   "stocks.summary.balance": "帳戶餘額",
-  "stocks.summary.recent_title": "最近五筆資金紀錄",
+  "stocks.summary.recent_title": "資金變動紀錄",
   "stocks.table.trades_title": "零股買賣資訊表",
   "stocks.table.cost_title": "持股成本表",
   "stocks.field.date": "日期",

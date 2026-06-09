@@ -122,8 +122,8 @@ def api_summary():
     # 4-7-4 帳戶餘額: type1 == 'deposit', type2 == 'settlement' 總金額和
     account_balance = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'settlement')
 
-    # Date recent 3 records
-    recent_funds = funds[:5]
+    # Return all funds for scrolling
+    recent_funds = funds
 
     return jsonify({
         'total_invested': total_invested,

@@ -60,6 +60,22 @@
       flex-direction: column;
       gap: 6px;
       margin-top: 6px;
+      max-height: 154px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .recent-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .recent-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .recent-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: var(--radius);
+    }
+    .recent-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text3);
     }
     .recent-item {
       display: flex;
