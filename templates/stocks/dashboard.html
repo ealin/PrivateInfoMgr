@@ -115,6 +115,13 @@
             {{ t('stocks.js.no_trades') }}
           </div>
         </div>
+        
+        <!-- 設定每股買賣紀錄最多顯示 n 筆 -->
+        <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 10px 16px; width: fit-content; box-shadow: var(--shadow);">
+          <span>{{ t('stocks.settings.max_visible_trades') }}</span>
+          <input type="number" id="maxVisibleTradesInput" min="1" style="width: 70px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); padding: 4px 8px; text-align: center;" placeholder="e.g. 5">
+          <span style="font-size:12px; color:var(--text3)">{{ t('stocks.settings.max_visible_trades_hint') }}</span>
+        </div>
       </div>
     </div>
 

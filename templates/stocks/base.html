@@ -77,6 +77,24 @@
     .recent-list::-webkit-scrollbar-thumb:hover {
       background: var(--text3);
     }
+    .trades-table-wrapper {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 2px;
+    }
+    .trades-table-wrapper::-webkit-scrollbar {
+      width: 4px;
+    }
+    .trades-table-wrapper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .trades-table-wrapper::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: var(--radius);
+    }
+    .trades-table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: var(--text3);
+    }
     .recent-item {
       display: flex;
       align-items: center;

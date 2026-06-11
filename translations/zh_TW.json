@@ -277,6 +277,8 @@
   "stocks.js.no_recent_funds": "尚無資金變動紀錄。",
   "stocks.js.no_trades": "尚無零股交易紀錄。",
   "stocks.js.no_cost": "目前無持股資訊。",
+  "stocks.settings.max_visible_trades": "每股交易紀錄最多顯示",
+  "stocks.settings.max_visible_trades_hint": "筆（留空代表不限制，超過時將以滾動條查看）",
 
   "system.backup_restore": "系統資料庫備份與還原",
   "system.backup_restore_desc": "備份所有功能的資料庫與設定檔為 ZIP，或選擇 ZIP 檔進行還原（還原前系統會自動執行備份）。",

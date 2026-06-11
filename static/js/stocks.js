@@ -32,6 +32,21 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Initialize max visible trades settings
+  const maxVisibleInput = document.getElementById('maxVisibleTradesInput');
+  if (maxVisibleInput) {
+    maxVisibleInput.value = localStorage.getItem('stocks_max_visible_trades') || '';
+    maxVisibleInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (val === '' || parseInt(val) > 0) {
+        localStorage.setItem('stocks_max_visible_trades', val);
+        if (window.lastLoadedTrades) {
+          renderTradesAndCost(window.lastLoadedTrades);
+        }
+      }
+    });
+  }
 });
 
 // Helper to open a modal
@@ -135,6 +150,7 @@ async function loadAllData() {
     const tradesRes = await fetch('/stocks/api/trades');
     if (!tradesRes.ok) throw new Error(window.T.load_failed);
     const tradesData = await tradesRes.json();
+    window.lastLoadedTrades = tradesData;
     renderTradesAndCost(tradesData);
   } catch (error) {
     console.error(error);
@@ -274,20 +290,31 @@ function renderTradesAndCost(trades) {
       `;
     });
 
+    const maxVisibleVal = localStorage.getItem('stocks_max_visible_trades') || '';
+    const maxVisible = parseInt(maxVisibleVal);
+    let scrollStyle = '';
+    if (maxVisible > 0 && group.list.length > maxVisible) {
+      // 表頭高度約 36px，每行高度約 36px
+      const maxHeight = 36 + maxVisible * 36;
+      scrollStyle = `style="max-height: ${maxHeight}px;"`;
+    }
+
     const tableHtml = `
-      <table class="records-table" style="font-size:11.5px; width:100%">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-      </table>
+      <div class="trades-table-wrapper" ${scrollStyle}>
+        <table class="records-table" style="font-size:11.5px; width:100%">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      </div>
     `;
 
     columnCard.innerHTML = headerHtml + tableHtml;

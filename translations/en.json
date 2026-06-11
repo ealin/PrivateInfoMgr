@@ -277,6 +277,8 @@
   "stocks.js.no_recent_funds": "No recent fund transactions found.",
   "stocks.js.no_trades": "No trade records found.",
   "stocks.js.no_cost": "No holdings found.",
+  "stocks.settings.max_visible_trades": "Max visible trades per stock:",
+  "stocks.settings.max_visible_trades_hint": "records (Leave empty for no limit. Scroll bar will appear if exceeded.)",
 
   "system.backup_restore": "System Database Backup & Restore",
   "system.backup_restore_desc": "Backup all database and index files into a ZIP, or upload a ZIP to restore (system will auto-backup before overwrite).",
