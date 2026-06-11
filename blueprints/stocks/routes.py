@@ -119,8 +119,11 @@ def api_summary():
     # 4-7-3 賣出獲利: type1 == 'deposit', type2 == 'sell_profit' 總金額和，並加上常數 149431
     total_sell_profit = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'sell_profit') + 149431
 
-    # 4-7-4 帳戶餘額: type1 == 'deposit', type2 == 'settlement' 總金額和
-    account_balance = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'settlement')
+    # 4-7-4 帳戶餘額: 交割款 + 存入現金 - 取出現金
+    balance_settlement = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'settlement')
+    balance_cash_deposit = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'cash')
+    balance_cash_withdraw = sum(f['total_amount'] for f in funds if f['type1'] == 'withdraw' and f['type2'] == 'cash')
+    account_balance = balance_settlement + balance_cash_deposit - balance_cash_withdraw
 
     # Return all funds for scrolling
     recent_funds = funds

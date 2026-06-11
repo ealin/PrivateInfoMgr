@@ -239,8 +239,8 @@ function renderTradesAndCost(trades) {
   // Render columns for each stock
   sortedKeys.forEach(key => {
     const group = grouped[key];
-    // Sort transactions within stock by date ascending
-    group.list.sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
+    // Sort transactions within stock by date descending
+    group.list.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
 
     const columnCard = document.createElement('div');
     columnCard.className = 'summary-card';
