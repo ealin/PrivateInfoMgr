@@ -125,7 +125,7 @@ build_win.bat
 |----------|---------|
 | 開發模式（`python app.py`）| 專案目錄下的 `data/` |
 | macOS 打包版（`PWDManager.app`）| `~/Library/Application Support/PWDManager/` |
-| Windows 打包版（`PWDManager.exe`）| `%APPDATA%\PWDManager\` (通常為 `C:\Users\<用戶名>\AppData\Roaming\PWDManager`) |
+| Windows 打包版（`PWDManager.exe`）| 執行檔同目錄下的 `data/` 資料夾 |
 
 備份除了可透過系統主畫面的「系統備份與還原」功能直接匯出 ZIP 檔外，亦可手動複製整個資料目錄（含 `index.json` 與所有 `.db` 檔案）。  
 移植到新機器時，可直接透過主頁的「還原資料庫」功能上傳備份的 ZIP 檔，或手動將 `.db` 複製至目標資料夾，並在 `index.json` 中新增對應項目即可。

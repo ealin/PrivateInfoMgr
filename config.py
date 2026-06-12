@@ -7,8 +7,10 @@ import sys
 if getattr(sys, 'frozen', False):
     BUNDLE_DIR = sys._MEIPASS
     if sys.platform == 'win32':
-        DATA_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), 'PWDManager')
+        # Windows: 儲存於與執行檔 (.exe) 相同目錄下的 data 資料夾中
+        DATA_DIR = os.path.join(os.path.dirname(sys.executable), 'data')
     else:
+        # macOS: 儲存於 Library/Application Support 中
         DATA_DIR = os.path.expanduser('~/Library/Application Support/PWDManager')
 else:
     BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
