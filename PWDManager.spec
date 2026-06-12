@@ -65,7 +65,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='PWDManager.app',
-    icon=None,
+    icon='icon.icns',
     bundle_identifier='com.local.pwdmanager',
     info_plist={
         'LSUIElement': True,          # hide from Dock; appear only in menu bar
