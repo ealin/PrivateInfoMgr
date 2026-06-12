@@ -88,14 +88,12 @@ venv/bin/python app.py
 
 ---
 
-## 打包為 macOS 應用程式
+## 打包與執行（macOS / Windows）
 
+### macOS 平台
 可將系統打包為雙擊即可執行的 `.app`，啟動後自動開啟瀏覽器，並在選單列顯示 🔐 圖示。
 
 ```bash
-# 安裝打包工具
-venv/bin/pip install pyinstaller rumps
-
 # 執行打包
 bash build.sh
 ```
@@ -109,6 +107,16 @@ bash build.sh
 
 > 首次執行若出現「無法驗證開發者」：系統設定 → 隱私與安全性 → 仍要開啟
 
+### Windows 平台
+可將系統打包為單一、雙擊即可啟動的 `.exe` 執行檔。啟動後會開啟控制台引導視窗，並自動開啟瀏覽器管理頁面。若要結束服務，直接關閉控制台視窗即可。
+
+```cmd
+# 雙擊執行打包腳本，或在命令提示字元執行：
+build_win.bat
+```
+
+完成後應用程式位於 `dist/PWDManager.exe`。
+
 ---
 
 ## 資料備份與移植
@@ -116,7 +124,8 @@ bash build.sh
 | 執行方式 | 資料位置 |
 |----------|---------|
 | 開發模式（`python app.py`）| 專案目錄下的 `data/` |
-| 打包版（`PWDManager.app`）| `~/Library/Application Support/PWDManager/` |
+| macOS 打包版（`PWDManager.app`）| `~/Library/Application Support/PWDManager/` |
+| Windows 打包版（`PWDManager.exe`）| `%APPDATA%\PWDManager\` (通常為 `C:\Users\<用戶名>\AppData\Roaming\PWDManager`) |
 
 備份除了可透過系統主畫面的「系統備份與還原」功能直接匯出 ZIP 檔外，亦可手動複製整個資料目錄（含 `index.json` 與所有 `.db` 檔案）。  
 移植到新機器時，可直接透過主頁的「還原資料庫」功能上傳備份的 ZIP 檔，或手動將 `.db` 複製至目標資料夾，並在 `index.json` 中新增對應項目即可。

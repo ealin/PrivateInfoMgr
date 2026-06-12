@@ -6,7 +6,10 @@ import sys
 # user data goes to ~/Library/Application Support/PWDManager.
 if getattr(sys, 'frozen', False):
     BUNDLE_DIR = sys._MEIPASS
-    DATA_DIR   = os.path.expanduser('~/Library/Application Support/PWDManager')
+    if sys.platform == 'win32':
+        DATA_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), 'PWDManager')
+    else:
+        DATA_DIR = os.path.expanduser('~/Library/Application Support/PWDManager')
 else:
     BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
     BUNDLE_DIR = BASE_DIR
