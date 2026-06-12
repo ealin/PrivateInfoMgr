@@ -91,21 +91,27 @@ venv/bin/python app.py
 ## 打包與執行（macOS / Windows）
 
 ### macOS 平台
-可將系統打包為雙擊即可執行的 `.app`，啟動後自動開啟瀏覽器，並在選單列顯示 🔐 圖示。
+可將系統打包為雙擊即可執行的 `.app`。啟動後會於系統頂部選單列（Menu Bar）顯示 🔐 圖示，並自動開啟瀏覽器管理頁面。若要結束服務，點擊選單列圖示並點選「結束」即可。
 
-```bash
-# 執行打包
-bash build.sh
-```
+#### 打包流程與步驟：
+1. **開啟終端機（Terminal）** 並切換至專案根目錄。
+2. **建立並啟用 Python 虛擬環境**：
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+3. **安裝系統依賴與打包工具**（包含 macOS 專屬選單列圖示 UI 套件 `rumps`）：
+   ```bash
+   pip install -r requirements.txt
+   pip install pyinstaller rumps
+   ```
+4. **執行打包腳本**：
+   ```bash
+   ./build.sh
+   ```
+5. 打包完成後，雙擊可執行的 app 位於：`dist/PWDManager.app`。
 
-完成後應用程式位於 `dist/PWDManager.app`。
-
-打包版的資料庫儲存路徑：
-```
-~/Library/Application Support/PWDManager/
-```
-
-> 首次執行若出現「無法驗證開發者」：系統設定 → 隱私與安全性 → 仍要開啟
+> **首次執行提示**：若 macOS 雙擊啟動時顯示「無法驗證開發者」，請至「系統設定」→「隱私與安全性」下點選「仍要開啟」。
 
 ### Windows 平台
 可將系統打包為單一、雙擊即可啟動的 `.exe` 執行檔。啟動後會開啟控制台引導視窗，並自動開啟瀏覽器管理頁面。若要結束服務，直接關閉控制台視窗即可。
@@ -124,7 +130,7 @@ build_win.bat
 | 執行方式 | 資料位置 |
 |----------|---------|
 | 開發模式（`python app.py`）| 專案目錄下的 `data/` |
-| macOS 打包版（`PWDManager.app`）| `~/Library/Application Support/PWDManager/` |
+| macOS 打包版（`PWDManager.app`）| 與 `PWDManager.app` 同目錄底下的 `data/` 資料夾 |
 | Windows 打包版（`PWDManager.exe`）| 執行檔同目錄下的 `data/` 資料夾 |
 
 備份除了可透過系統主畫面的「系統備份與還原」功能直接匯出 ZIP 檔外，亦可手動複製整個資料目錄（含 `index.json` 與所有 `.db` 檔案）。  

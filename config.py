@@ -9,9 +9,21 @@ if getattr(sys, 'frozen', False):
     if sys.platform == 'win32':
         # Windows: 儲存於與執行檔 (.exe) 相同目錄下的 data 資料夾中
         DATA_DIR = os.path.join(os.path.dirname(sys.executable), 'data')
+    elif sys.platform == 'darwin':
+        # macOS: 儲存於與 .app 相同目錄底下的 data 資料夾中。
+        # 由於 sys.executable 通常指向 PWDManager.app/Contents/MacOS/PWDManager，
+        # 為了取得與 PWDManager.app 同層之目錄，需向上爬升四層父目錄。
+        exe_path = sys.executable
+        if '.app/Contents/MacOS' in exe_path.replace('\\', '/'):
+            app_dir = exe_path
+            for _ in range(4):
+                app_dir = os.path.dirname(app_dir)
+            DATA_DIR = os.path.join(app_dir, 'data')
+        else:
+            DATA_DIR = os.path.join(os.path.dirname(exe_path), 'data')
     else:
-        # macOS: 儲存於 Library/Application Support 中
-        DATA_DIR = os.path.expanduser('~/Library/Application Support/PWDManager')
+        # 其他平台: 儲存於與執行檔相同目錄底下的 data 資料夾中
+        DATA_DIR = os.path.join(os.path.dirname(sys.executable), 'data')
 else:
     BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
     BUNDLE_DIR = BASE_DIR
