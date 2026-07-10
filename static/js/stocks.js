@@ -418,7 +418,7 @@ function renderTradesAndCost(trades) {
 
 // Delete action for a trade record
 async function deleteTradeRecord(id) {
-  if (!confirm(window.T.delete_failed.replace('：', '?'))) return;
+  if (!confirm(window.T.confirm_delete)) return;
   try {
     const res = await fetch(`/stocks/api/trades/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(window.T.delete_failed);
@@ -430,7 +430,7 @@ async function deleteTradeRecord(id) {
 
 // Delete action for a fund record
 async function deleteFundRecord(id) {
-  if (!confirm(window.T.delete_failed.replace('：', '?'))) return;
+  if (!confirm(window.T.confirm_delete)) return;
   try {
     const res = await fetch(`/stocks/api/funds/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(window.T.delete_failed);

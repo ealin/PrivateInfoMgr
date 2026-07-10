@@ -280,6 +280,7 @@
   "stocks.js.no_cost": "No holdings found.",
   "stocks.settings.max_visible_trades": "Max visible trades per stock:",
   "stocks.settings.max_visible_trades_hint": "records (Leave empty for no limit. Scroll bar will appear if exceeded.)",
+  "stocks.js.confirm_delete": "Are you sure you want to delete this record?",
 
   "system.backup_restore": "System Database Backup & Restore",
   "system.backup_restore_desc": "Backup all database and index files into a ZIP, or upload a ZIP to restore (system will auto-backup before overwrite).",
