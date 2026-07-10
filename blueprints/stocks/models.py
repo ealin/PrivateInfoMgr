@@ -35,6 +35,7 @@ def init_stocks_db() -> None:
             type2        TEXT NOT NULL, -- cash / dividend / sell_profit / settlement
             stock_name   TEXT NOT NULL DEFAULT '',
             total_amount REAL NOT NULL,
+            trade_id     INTEGER,
             created_at   TEXT DEFAULT (datetime('now'))
         );
     ''')
@@ -45,6 +46,13 @@ def init_stocks_db() -> None:
         conn.execute('SELECT is_bulk FROM stock_trades LIMIT 1')
     except sqlite3.OperationalError:
         conn.execute('ALTER TABLE stock_trades ADD COLUMN is_bulk INTEGER DEFAULT 0')
+        conn.commit()
+
+    # Dynamic migration: add trade_id if it doesn't exist in funds
+    try:
+        conn.execute('SELECT trade_id FROM funds LIMIT 1')
+    except sqlite3.OperationalError:
+        conn.execute('ALTER TABLE funds ADD COLUMN trade_id INTEGER')
         conn.commit()
 
     conn.close()
@@ -75,21 +83,22 @@ def get_all_trades() -> list[dict]:
 
 
 def delete_trade(trade_id: int) -> None:
-    """Delete a trade record by id."""
+    """Delete a trade record by id and its associated funds."""
     conn = sqlite3.connect(get_db_path())
+    conn.execute('DELETE FROM funds WHERE trade_id = ?', (trade_id,))
     conn.execute('DELETE FROM stock_trades WHERE id = ?', (trade_id,))
     conn.commit()
     conn.close()
 
 
 def create_fund(date: str, type1: str, type2: str, stock_name: str,
-                total_amount: float) -> int:
+                total_amount: float, trade_id: int = None) -> int:
     """Insert a new fund record."""
     conn = sqlite3.connect(get_db_path())
     cur = conn.execute(
-        '''INSERT INTO funds (date, type1, type2, stock_name, total_amount)
-           VALUES (?, ?, ?, ?, ?)''',
-        (date, type1, type2, stock_name, total_amount),
+        '''INSERT INTO funds (date, type1, type2, stock_name, total_amount, trade_id)
+           VALUES (?, ?, ?, ?, ?, ?)''',
+        (date, type1, type2, stock_name, total_amount, trade_id),
     )
     fund_id = cur.lastrowid
     conn.commit()

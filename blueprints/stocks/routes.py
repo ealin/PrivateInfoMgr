@@ -100,7 +100,8 @@ def api_create_trade():
             type1='deposit',
             type2='sell_profit',
             stock_name=stock_name,
-            total_amount=profit_amount
+            total_amount=profit_amount,
+            trade_id=trade_id
         )
 
     return jsonify({'id': trade_id}), 201
