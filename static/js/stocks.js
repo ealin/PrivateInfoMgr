@@ -161,7 +161,7 @@ async function loadAllData() {
 function renderSummary(data) {
   document.getElementById('valInvested').innerText = formatCurrency(data.total_invested);
   document.getElementById('valDividends').innerText = formatCurrency(data.total_dividends);
-  document.getElementById('valSellProfit').innerText = formatCurrency(data.total_sell_profit);
+  document.getElementById('valSellProfit').innerText = formatCurrency(data.total_sell_profit, true);
   document.getElementById('valBalance').innerText = formatCurrency(data.account_balance);
 
   const recentList = document.getElementById('recentFundsList');
