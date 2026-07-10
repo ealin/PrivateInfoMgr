@@ -213,7 +213,20 @@ function renderTradesAndCost(trades) {
         nameMap.set(t.stock_name.trim(), t.stock_code ? t.stock_code.trim() : '');
       }
     });
-    nameMap.forEach((code, name) => {
+    const sortedNames = Array.from(nameMap.keys()).sort((a, b) => {
+      const isNonChineseA = /^[^\u4e00-\u9fa5]/.test(a);
+      const isNonChineseB = /^[^\u4e00-\u9fa5]/.test(b);
+      
+      if (isNonChineseA && !isNonChineseB) {
+        return -1;
+      }
+      if (!isNonChineseA && isNonChineseB) {
+        return 1;
+      }
+      return a.localeCompare(b, 'zh-Hant');
+    });
+
+    sortedNames.forEach(name => {
       const option = document.createElement('option');
       option.value = name;
       datalist.appendChild(option);
