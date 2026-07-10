@@ -258,6 +258,7 @@
   "stocks.field.cost": "Total Cost",
   "stocks.field.cost_per_share": "Cost/Share",
   "stocks.field.actions": "Actions",
+  "stocks.field.is_bulk": "Bulk Sell",
   "stocks.type.buy": "Buy",
   "stocks.type.sell": "Sell",
   "stocks.type.stock_dividend": "Stock Div",

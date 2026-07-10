@@ -24,6 +24,7 @@ def init_stocks_db() -> None:
             type         TEXT NOT NULL, -- buy / sell / stock_dividend
             total_amount REAL NOT NULL,
             shares       INTEGER NOT NULL,
+            is_bulk      INTEGER DEFAULT 0,
             created_at   TEXT DEFAULT (datetime('now'))
         );
 
@@ -38,17 +39,25 @@ def init_stocks_db() -> None:
         );
     ''')
     conn.commit()
+
+    # Dynamic migration: add is_bulk if it doesn't exist in stock_trades
+    try:
+        conn.execute('SELECT is_bulk FROM stock_trades LIMIT 1')
+    except sqlite3.OperationalError:
+        conn.execute('ALTER TABLE stock_trades ADD COLUMN is_bulk INTEGER DEFAULT 0')
+        conn.commit()
+
     conn.close()
 
 
 def create_trade(stock_name: str, stock_code: str, date: str, trade_type: str,
-                 total_amount: float, shares: int) -> int:
+                 total_amount: float, shares: int, is_bulk: int = 0) -> int:
     """Insert a new stock trade record."""
     conn = sqlite3.connect(get_db_path())
     cur = conn.execute(
-        '''INSERT INTO stock_trades (stock_name, stock_code, date, type, total_amount, shares)
-           VALUES (?, ?, ?, ?, ?, ?)''',
-        (stock_name, stock_code, date, trade_type, total_amount, shares),
+        '''INSERT INTO stock_trades (stock_name, stock_code, date, type, total_amount, shares, is_bulk)
+           VALUES (?, ?, ?, ?, ?, ?, ?)''',
+        (stock_name, stock_code, date, trade_type, total_amount, shares, is_bulk),
     )
     trade_id = cur.lastrowid
     conn.commit()

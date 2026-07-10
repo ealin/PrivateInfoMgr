@@ -261,6 +261,10 @@
         <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
         <input type="number" step="any" min="0.01" name="total_amount" required placeholder="0.00">
       </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:6px;margin:12px 0">
+        <input type="checkbox" id="sellIsBulk" name="is_bulk" value="1" style="width:auto;margin:0;cursor:pointer">
+        <label for="sellIsBulk" style="cursor:pointer;margin:0;user-select:none;font-weight:normal;text-transform:none">{{ t('stocks.field.is_bulk') }}</label>
+      </div>
       <div class="form-actions">
         <button type="button" class="btn btn--ghost" onclick="closeModal('modalSellTrade')">{{ t('stocks.modal.cancel') }}</button>
         <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>

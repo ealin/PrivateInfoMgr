@@ -24,6 +24,37 @@ def api_get_trades():
     return jsonify(get_all_trades())
 
 
+def calculate_average_cost(stock_name: str) -> float:
+    """Calculate the average cost of a stock prior to the current transaction."""
+    trades = get_all_trades()
+    total_shares = 0
+    total_cost = 0.0
+    
+    # trades is sorted by date ASC, id ASC
+    for t in trades:
+        if t['stock_name'] != stock_name:
+            continue
+        if t['type'] == 'buy':
+            total_shares += t['shares']
+            total_cost += t['total_amount']
+        elif t['type'] == 'stock_dividend':
+            total_shares += t['shares']
+        elif t['type'] == 'sell':
+            # Check if this trade is bulk or normal
+            is_bulk = t.get('is_bulk', 0)
+            if is_bulk == 1:
+                # Deduct based on average cost before this sell
+                avg_cost = total_cost / total_shares if total_shares > 0 else 0.0
+                total_cost -= (t['shares'] * avg_cost)
+                total_shares -= t['shares']
+            else:
+                # Deduct based on 1.06 rule
+                total_shares -= t['shares']
+                total_cost -= (t['total_amount'] / 1.06)
+                
+    return total_cost / total_shares if total_shares > 0 else 0.0
+
+
 @stocks_bp.route('/api/trades', methods=['POST'])
 def api_create_trade():
     """Create a new stock trade record."""
@@ -32,6 +63,7 @@ def api_create_trade():
     stock_code = data.get('stock_code', '').strip()
     trade_type = data.get('type', '')  # buy / sell / stock_dividend
     shares = int(data.get('shares', 0))
+    is_bulk = int(data.get('is_bulk', 0)) # 1 = bulk sell, 0 = normal
 
     if not stock_name or not stock_code or not trade_type or shares <= 0:
         return jsonify({'error': t('stocks.api.invalid_data')}), 400
@@ -45,12 +77,24 @@ def api_create_trade():
     if not date:
         date = datetime.now().strftime('%Y-%m-%d')
 
-    trade_id = create_trade(stock_name, stock_code, date, trade_type, total_amount, shares)
+    # Calculate average cost before inserting this sell transaction
+    avg_cost = 0.0
+    if trade_type == 'sell' and is_bulk == 1:
+        avg_cost = calculate_average_cost(stock_name)
+
+    trade_id = create_trade(stock_name, stock_code, date, trade_type, total_amount, shares, is_bulk)
 
     # Special behavior for 4-4 (賣出零股):
-    # 資金資訊 DB 增加一筆：日期為今日系統時間，type 1="存入", type 2="賣出差額", 總金額 = 賣出總金額 * 0.06
+    # 資金資訊 DB 增加一筆：日期為今日系統時間，type 1="存入", type 2="賣出差額", 總金額 = 獲利額
     if trade_type == 'sell':
-        profit_amount = total_amount * 0.06
+        if is_bulk == 1:
+            # 大量賣出：獲利 = 賣出總金額 - (賣出股數 * 賣出前單股成本)
+            cost_sell = shares * avg_cost
+            profit_amount = total_amount - cost_sell
+        else:
+            # 一般賣出：獲利限制在 6%
+            profit_amount = total_amount * 0.06
+
         create_fund(
             date=datetime.now().strftime('%Y-%m-%d'),
             type1='deposit',

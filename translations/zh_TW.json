@@ -258,6 +258,7 @@
   "stocks.field.cost": "總成本",
   "stocks.field.cost_per_share": "每股成本",
   "stocks.field.actions": "操作",
+  "stocks.field.is_bulk": "大量賣出",
   "stocks.type.buy": "買入",
   "stocks.type.sell": "賣出",
   "stocks.type.stock_dividend": "配股",

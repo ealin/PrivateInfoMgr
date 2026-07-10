@@ -116,6 +116,11 @@ async function handleFormSubmit(event, url, modalId) {
     data[key] = value;
   });
 
+  if (modalId === 'modalSellTrade') {
+    const bulkCheckbox = form.querySelector('#sellIsBulk');
+    data['is_bulk'] = (bulkCheckbox && bulkCheckbox.checked) ? 1 : 0;
+  }
+
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -331,15 +336,26 @@ function renderTradesAndCost(trades) {
     let totalShares = 0;
     let totalCost = 0;
 
-    group.list.forEach(t => {
+    // To calculate the running average cost correctly (especially for bulk sells),
+    // we must traverse the trades in chronological ascending order.
+    const chronologicalTrades = [...group.list].sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
+
+    chronologicalTrades.forEach(t => {
       if (t.type === 'buy') {
         totalShares += t.shares;
         totalCost += t.total_amount;
       } else if (t.type === 'stock_dividend') {
         totalShares += t.shares;
       } else if (t.type === 'sell') {
+        if (t.is_bulk === 1 || t.is_bulk === true) {
+          // Bulk Sell: Deduct actual cost based on average cost before this sell
+          const avgCost = totalShares > 0 ? (totalCost / totalShares) : 0;
+          totalCost -= (t.shares * avgCost);
+        } else {
+          // Normal Sell: Deduct cost based on 1.06 rule
+          totalCost -= (t.total_amount / 1.06);
+        }
         totalShares -= t.shares;
-        totalCost -= (t.total_amount / 1.06);
       }
     });
 
