@@ -61,6 +61,7 @@ def init_stocks_db() -> None:
 def create_trade(stock_name: str, stock_code: str, date: str, trade_type: str,
                  total_amount: float, shares: int, is_bulk: int = 0) -> int:
     """Insert a new stock trade record."""
+    init_stocks_db()
     conn = sqlite3.connect(get_db_path())
     cur = conn.execute(
         '''INSERT INTO stock_trades (stock_name, stock_code, date, type, total_amount, shares, is_bulk)
@@ -94,6 +95,7 @@ def delete_trade(trade_id: int) -> None:
 def create_fund(date: str, type1: str, type2: str, stock_name: str,
                 total_amount: float, trade_id: int = None) -> int:
     """Insert a new fund record."""
+    init_stocks_db()
     conn = sqlite3.connect(get_db_path())
     cur = conn.execute(
         '''INSERT INTO funds (date, type1, type2, stock_name, total_amount, trade_id)
