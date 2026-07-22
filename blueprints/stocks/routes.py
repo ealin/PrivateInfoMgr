@@ -40,17 +40,16 @@ def calculate_average_cost(stock_name: str) -> float:
         elif t['type'] == 'stock_dividend':
             total_shares += t['shares']
         elif t['type'] == 'sell':
-            # Check if this trade is bulk or normal
             is_bulk = t.get('is_bulk', 0)
+            avg_cost = total_cost / total_shares if total_shares > 0 else 0.0
             if is_bulk == 1:
-                # Deduct based on average cost before this sell
-                avg_cost = total_cost / total_shares if total_shares > 0 else 0.0
                 total_cost -= (t['shares'] * avg_cost)
-                total_shares -= t['shares']
             else:
-                # Deduct based on 1.06 rule
-                total_shares -= t['shares']
-                total_cost -= (t['total_amount'] / 1.06)
+                calculated_deduct = t['total_amount'] / 1.06
+                max_deduct = t['shares'] * avg_cost
+                actual_deduct = min(calculated_deduct, max_deduct) if (total_shares > 0 and max_deduct > 0) else calculated_deduct
+                total_cost -= actual_deduct
+            total_shares -= t['shares']
                 
     return total_cost / total_shares if total_shares > 0 else 0.0
 

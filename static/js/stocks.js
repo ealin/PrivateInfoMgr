@@ -360,13 +360,16 @@ function renderTradesAndCost(trades) {
       } else if (t.type === 'stock_dividend') {
         totalShares += t.shares;
       } else if (t.type === 'sell') {
+        const avgCost = totalShares > 0 ? (totalCost / totalShares) : 0;
         if (t.is_bulk === 1 || t.is_bulk === true) {
           // Bulk Sell: Deduct actual cost based on average cost before this sell
-          const avgCost = totalShares > 0 ? (totalCost / totalShares) : 0;
           totalCost -= (t.shares * avgCost);
         } else {
-          // Normal Sell: Deduct cost based on 1.06 rule
-          totalCost -= (t.total_amount / 1.06);
+          // Normal Sell: Deduct cost based on 1.06 rule, but cap deduct amount at actual cost to avoid negative cost
+          const calculatedDeduct = t.total_amount / 1.06;
+          const maxDeduct = t.shares * avgCost;
+          const actualDeduct = (totalShares > 0 && maxDeduct > 0) ? Math.min(calculatedDeduct, maxDeduct) : calculatedDeduct;
+          totalCost -= actualDeduct;
         }
         totalShares -= t.shares;
       }
