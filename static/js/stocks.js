@@ -95,11 +95,13 @@ function toggleAddTradeAmount(isDividend) {
   if (isDividend) {
     groupAmount.style.display = 'none';
     amountInput.removeAttribute('required');
+    amountInput.setAttribute('min', '0');
     amountInput.value = '0';
     infoDividend.style.display = 'block';
   } else {
     groupAmount.style.display = 'block';
     amountInput.setAttribute('required', '');
+    amountInput.setAttribute('min', '0.01');
     amountInput.value = '';
     infoDividend.style.display = 'none';
   }
