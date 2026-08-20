@@ -156,6 +156,7 @@ def api_summary():
     invested_deposit = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'cash')
     invested_withdraw = sum(f['total_amount'] for f in funds if f['type1'] == 'withdraw' and f['type2'] == 'cash')
     total_invested = invested_deposit - invested_withdraw
+    total_cash_withdrawn = invested_withdraw
 
     # 4-7-2 股利總額: type1 == 'deposit', type2 == 'dividend' 總金額和
     total_dividends = sum(f['total_amount'] for f in funds if f['type1'] == 'deposit' and f['type2'] == 'dividend')
@@ -174,6 +175,7 @@ def api_summary():
 
     return jsonify({
         'total_invested': total_invested,
+        'total_cash_withdrawn': total_cash_withdrawn,
         'total_dividends': total_dividends,
         'total_sell_profit': total_sell_profit,
         'account_balance': account_balance,

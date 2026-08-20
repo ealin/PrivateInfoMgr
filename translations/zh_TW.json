@@ -241,6 +241,7 @@
   "stocks.action.sell_trade": "賣出零股",
   "stocks.action.set_settlement": "設定交割款",
   "stocks.summary.invested": "投入總金額",
+  "stocks.summary.cash_withdrawn": "領出現金總額",
   "stocks.summary.total_stock_cost": "股票總成本",
   "stocks.summary.dividends": "股利總額",
   "stocks.summary.sell_profit": "賣出獲利",

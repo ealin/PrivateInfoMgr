@@ -167,6 +167,9 @@ async function loadAllData() {
 // Render 4-7: Investment and Profit Summary
 function renderSummary(data) {
   document.getElementById('valInvested').innerText = formatCurrency(data.total_invested);
+  if (document.getElementById('valCashWithdrawn')) {
+    document.getElementById('valCashWithdrawn').innerText = formatCurrency(data.total_cash_withdrawn);
+  }
   document.getElementById('valDividends').innerText = formatCurrency(data.total_dividends);
   document.getElementById('valSellProfit').innerText = formatCurrency(data.total_sell_profit, true);
   document.getElementById('valBalance').innerText = formatCurrency(data.account_balance);

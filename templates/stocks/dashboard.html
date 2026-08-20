@@ -38,30 +38,33 @@
 
     <!-- 4-7 資金與盈虧總覽 -->
     <div class="summary-grid">
-      <!-- 4-7-1 投入總金額 -->
+      <!-- 4-7-1 投入總金額與領出現金總額 -->
       <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
           <div class="summary-label">{{ t('stocks.summary.invested') }}</div>
           <div class="summary-val" id="valInvested">$0</div>
         </div>
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;">
-          <div class="summary-label" style="margin-bottom: 8px;">{{ t('stocks.summary.total_stock_cost') }}</div>
-          <div class="summary-val" id="valTotalStockCost">$0</div>
+          <div class="summary-label" style="margin-bottom: 8px;">{{ t('stocks.summary.cash_withdrawn') }}</div>
+          <div class="summary-val" id="valCashWithdrawn">$0</div>
         </div>
       </div>
-      <!-- 4-7-2 股利總額 -->
+      <!-- 4-7-2 股利總額與賣出獲利 -->
       <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
           <div class="summary-label">{{ t('stocks.summary.dividends') }}</div>
           <div class="summary-val" id="valDividends">$0</div>
         </div>
-        <div style="flex: 1;"></div>
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;">
+          <div class="summary-label" style="margin-bottom: 8px;">{{ t('stocks.summary.sell_profit') }}</div>
+          <div class="summary-val" id="valSellProfit">$0</div>
+        </div>
       </div>
-      <!-- 4-7-3 賣出獲利 -->
+      <!-- 4-7-3 股票總成本 -->
       <div class="summary-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-          <div class="summary-label">{{ t('stocks.summary.sell_profit') }}</div>
-          <div class="summary-val" id="valSellProfit">$0</div>
+          <div class="summary-label">{{ t('stocks.summary.total_stock_cost') }}</div>
+          <div class="summary-val" id="valTotalStockCost">$0</div>
         </div>
         <div style="flex: 1;"></div>
       </div>

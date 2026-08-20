@@ -241,6 +241,7 @@
   "stocks.action.sell_trade": "Sell Fractional Share",
   "stocks.action.set_settlement": "Set Settlement Amount",
   "stocks.summary.invested": "Total Invested",
+  "stocks.summary.cash_withdrawn": "Total Cash Withdrawn",
   "stocks.summary.total_stock_cost": "Total Stock Cost",
   "stocks.summary.dividends": "Total Dividends",
   "stocks.summary.sell_profit": "Sell Profits",
