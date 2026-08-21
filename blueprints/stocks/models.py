@@ -36,6 +36,7 @@ def init_stocks_db() -> None:
             stock_name   TEXT NOT NULL DEFAULT '',
             total_amount REAL NOT NULL,
             trade_id     INTEGER,
+            note         TEXT NOT NULL DEFAULT '',
             created_at   TEXT DEFAULT (datetime('now'))
         );
     ''')
@@ -53,6 +54,13 @@ def init_stocks_db() -> None:
         conn.execute('SELECT trade_id FROM funds LIMIT 1')
     except sqlite3.OperationalError:
         conn.execute('ALTER TABLE funds ADD COLUMN trade_id INTEGER')
+        conn.commit()
+
+    # Dynamic migration: add note if it doesn't exist in funds
+    try:
+        conn.execute('SELECT note FROM funds LIMIT 1')
+    except sqlite3.OperationalError:
+        conn.execute('ALTER TABLE funds ADD COLUMN note TEXT NOT NULL DEFAULT ""')
         conn.commit()
 
     conn.close()
@@ -93,14 +101,14 @@ def delete_trade(trade_id: int) -> None:
 
 
 def create_fund(date: str, type1: str, type2: str, stock_name: str,
-                total_amount: float, trade_id: int = None) -> int:
+                total_amount: float, trade_id: int = None, note: str = '') -> int:
     """Insert a new fund record."""
     init_stocks_db()
     conn = sqlite3.connect(get_db_path())
     cur = conn.execute(
-        '''INSERT INTO funds (date, type1, type2, stock_name, total_amount, trade_id)
-           VALUES (?, ?, ?, ?, ?, ?)''',
-        (date, type1, type2, stock_name, total_amount, trade_id),
+        '''INSERT INTO funds (date, type1, type2, stock_name, total_amount, trade_id, note)
+           VALUES (?, ?, ?, ?, ?, ?, ?)''',
+        (date, type1, type2, stock_name, total_amount, trade_id, note),
     )
     fund_id = cur.lastrowid
     conn.commit()

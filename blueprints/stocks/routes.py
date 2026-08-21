@@ -127,6 +127,7 @@ def api_create_fund():
     type2 = data.get('type2', '')  # cash / dividend / sell_profit / settlement
     stock_name = data.get('stock_name', '').strip()
     total_amount = float(data.get('total_amount', 0))
+    note = data.get('note', '').strip()
 
     date = data.get('date', '').strip()
     if not date:
@@ -135,7 +136,7 @@ def api_create_fund():
     if not type1 or not type2:
         return jsonify({'error': t('stocks.api.invalid_data')}), 400
 
-    fund_id = create_fund(date, type1, type2, stock_name, total_amount)
+    fund_id = create_fund(date, type1, type2, stock_name, total_amount, note=note)
     return jsonify({'id': fund_id}), 201
 
 

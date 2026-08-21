@@ -191,6 +191,9 @@ function renderSummary(data) {
       if (fund.stock_name) {
         detail += ` (${fund.stock_name})`;
       }
+      if (fund.note) {
+        detail += ` (${fund.note})`;
+      }
 
       item.innerHTML = `
         <span>${detail} <strong>${displayAmount}</strong></span>

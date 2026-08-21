@@ -155,6 +155,10 @@
         <label>{{ t('stocks.field.amount') }} <span class="required">*</span></label>
         <input type="number" step="any" min="0.01" name="total_amount" required placeholder="0.00">
       </div>
+      <div class="form-group">
+        <label>{{ t('stocks.field.note') }}</label>
+        <input type="text" name="note" placeholder="e.g. 買股資金">
+      </div>
       <div class="form-actions">
         <button type="button" class="btn btn--ghost" onclick="closeModal('modalDepositWithdraw')">{{ t('stocks.modal.cancel') }}</button>
         <button type="submit" class="btn btn--primary">{{ t('stocks.modal.confirm') }}</button>
