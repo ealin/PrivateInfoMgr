@@ -1,4 +1,5 @@
 """SQLite data access layer for Places module (no encryption)."""
+from __future__ import annotations
 
 import json
 import os

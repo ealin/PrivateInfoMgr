@@ -6,6 +6,7 @@ Adding a new language:
   2. Append the code to SUPPORTED_LANGS below.
   The language selector UI updates automatically.
 """
+from __future__ import annotations
 
 import json
 import os

@@ -1,4 +1,5 @@
 """SQLite data access layer for encrypted Bucket List databases."""
+from __future__ import annotations
 
 import json
 import os

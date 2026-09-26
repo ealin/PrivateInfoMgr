@@ -1,4 +1,5 @@
 """SQLite database access layer for Stocks module (no encryption)."""
+from __future__ import annotations
 
 import os
 import sqlite3

@@ -1,4 +1,5 @@
 """Places Blueprint — 我想去的 routes."""
+from __future__ import annotations
 
 import uuid
 from urllib.parse import urlparse
